@@ -1,0 +1,245 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+body {
+    background: linear-gradient(135deg, #181a20 0%, #23272f 100%);
+    color: #f1f1f1;
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 48px auto;
+    padding: 32px 32px 40px 32px;
+    background: rgba(35,39,47,0.98);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+    position: relative;
+}
+
+h1 {
+    text-align: center;
+    font-weight: 700;
+    margin-bottom: 36px;
+    letter-spacing: 1px;
+    font-size: 2.2rem;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 32px;
+    margin-bottom: 36px;
+}
+
+.card {
+    background: linear-gradient(135deg, #23272f 60%, #24262b 100%);
+    border-radius: 16px;
+    padding: 32px 24px 28px 24px;
+    min-width: 180px;
+    text-align: center;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+    transition: transform 0.15s, box-shadow 0.15s;
+    position: relative;
+}
+.card:hover {
+    transform: translateY(-4px) scale(1.03);
+    box-shadow: 0 8px 32px rgba(58,134,255,0.10);
+}
+.card h2 {
+    font-size: 1.15rem;
+    margin-bottom: 14px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #3a86ff;
+}
+.card p {
+    font-size: 2.2rem;
+    margin: 0 0 10px 0;
+    font-weight: 500;
+    letter-spacing: 1px;
+}
+.valve-controls {
+    margin-top: 10px;
+}
+.valve-controls button {
+    margin: 0 8px;
+    padding: 10px 22px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(90deg, #3a86ff 60%, #265dbe 100%);
+    color: #fff;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    box-shadow: 0 2px 8px rgba(58,134,255,0.08);
+}
+.valve-controls button:hover {
+    background: linear-gradient(90deg, #265dbe 60%, #3a86ff 100%);
+    transform: scale(1.05);
+}
+
+.chart-section {
+    background: linear-gradient(135deg, #23272f 60%, #24262b 100%);
+    border-radius: 16px;
+    padding: 32px 24px 24px 24px;
+    margin-top: 24px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+}
+.chart-section h2 {
+    color: #3a86ff;
+    margin-bottom: 18px;
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+/* Auth Pages */
+.auth-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #181a20 0%, #23272f 100%);
+}
+.auth-card {
+    background: rgba(35,39,47,0.98);
+    border-radius: 18px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+    padding: 40px 36px 32px 36px;
+    min-width: 340px;
+    text-align: center;
+}
+.auth-card h1 {
+    font-size: 2rem;
+    margin-bottom: 24px;
+    color: #3a86ff;
+    font-weight: 700;
+}
+.auth-card form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 12px;
+}
+.auth-card input {
+    padding: 12px 10px;
+    border-radius: 6px;
+    border: none;
+    background: #1a1c22;
+    color: #f1f1f1;
+    font-size: 1rem;
+    margin-bottom: 2px;
+}
+.auth-card button {
+    background: linear-gradient(90deg, #3a86ff 60%, #265dbe 100%);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 12px 0;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: background 0.2s, transform 0.1s;
+}
+.auth-card button:hover {
+    background: linear-gradient(90deg, #265dbe 60%, #3a86ff 100%);
+    transform: scale(1.03);
+}
+.auth-link {
+    margin-top: 10px;
+    color: #b0b8c1;
+    font-size: 0.98rem;
+}
+.auth-link a {
+    color: #3a86ff;
+    text-decoration: none;
+    font-weight: 700;
+}
+.auth-link a:hover {
+    text-decoration: underline;
+}
+
+.auth-section {
+    background: rgba(35,39,47,0.98);
+    border-radius: 14px;
+    padding: 18px 24px;
+    margin-bottom: 32px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+}
+#auth-forms {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    margin-bottom: 12px;
+}
+#auth-forms form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+#auth-forms input {
+    padding: 8px;
+    border-radius: 4px;
+    border: none;
+    background: #1a1c22;
+    color: #f1f1f1;
+}
+#auth-forms button {
+    background: #3a86ff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 0;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 4px;
+}
+#auth-forms button:hover {
+    background: #265dbe;
+}
+#logout-btn {
+    background: #ef476f;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 18px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 8px;
+}
+#logout-btn:hover {
+    background: #b02a4a;
+}
+
+@media (max-width: 900px) {
+    .container {
+        padding: 12px;
+    }
+    .cards {
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+    }
+    .auth-card {
+        min-width: 90vw;
+    }
+}
+@media (max-width: 600px) {
+    .cards {
+        grid-template-columns: 1fr;
+    }
+    .container {
+        padding: 4px;
+    }
+    .card {
+        min-width: 90vw;
+    }
+    .auth-card {
+        min-width: 98vw;
+        padding: 18px 4px 18px 4px;
+    }
+}
