@@ -4,13 +4,12 @@ import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com
 
 // TODO: Paste your Firebase config here (same as main.js)
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    databaseURL: "YOUR_DATABASE_URL",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyA3O_fsdj614KDUS1MV6ZGwijaLGwjo4HA",
+  authDomain: "drip-anurag.firebaseapp.com",
+  projectId: "drip-anurag",
+  storageBucket: "drip-anurag.firebasestorage.app",
+  messagingSenderId: "312422295524",
+  appId: "1:312422295524:web:68804cf01448603b7c89f1"
 };
 
 const app = initializeApp(firebaseConfig);
