@@ -550,6 +550,84 @@
   </style>
 </head>
 <body>
+  <!-- Loading Screen -->
+  <div id="loadingScreen" style="
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    color: white;
+    font-size: 1.2em;
+  ">
+    <div style="text-align: center;">
+      <div style="
+        border: 3px solid rgba(255,255,255,0.3);
+        border-radius: 50%;
+        border-top: 3px solid white;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 20px;
+      "></div>
+      <p>Checking authentication...</p>
+    </div>
+  </div>
+
+  <!-- Authentication Script -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
+    import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
+
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyA3O_fsdj614KDUS1MV6ZGwijaLGwjo4HA",
+      authDomain: "drip-anurag.firebaseapp.com",
+      projectId: "drip-anurag",
+      storageBucket: "drip-anurag.firebasestorage.app",
+      messagingSenderId: "312422295524",
+      appId: "1:312422295524:web:68804cf01448603b7c89f1"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Check authentication
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, show the dashboard
+        document.getElementById('loadingScreen').style.display = 'none';
+        document.getElementById('mainContent').style.display = 'block';
+        
+        // Update user info in header if elements exist
+        const userEmail = document.getElementById('userEmail');
+        const userAvatar = document.getElementById('userAvatar');
+        if (userEmail) userEmail.textContent = user.email;
+        if (userAvatar) userAvatar.textContent = (user.displayName || user.email).charAt(0).toUpperCase();
+      } else {
+        // User is not signed in, redirect to login
+        window.location.href = 'login.html';
+      }
+    });
+
+    // Add logout functionality
+    window.logout = async () => {
+      try {
+        await auth.signOut();
+        window.location.href = 'website.html';
+      } catch (error) {
+        console.error('Logout error:', error);
+      }
+    };
+  </script>
+
+  <div id="mainContent" style="display: none;">
   <div class="container">
     <header>
       <a href="#" class="logo" onclick="showSection('home')">
@@ -563,6 +641,46 @@
         <a href="#" onclick="showSection('ai')">AI Suggestions</a>
       </div>
       <div class="header-controls">
+        <div class="user-info" style="
+          display: flex;
+          align-items: center;
+          gap: 15px;
+          margin-right: 20px;
+        ">
+          <div style="
+            width: 35px;
+            height: 35px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9em;
+          " id="userAvatar">U</div>
+          <span id="userEmail" style="
+            color: var(--text-primary);
+            font-size: 0.9em;
+            max-width: 150px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          ">user@example.com</span>
+          <button onclick="logout()" style="
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.85em;
+            font-weight: 500;
+            transition: background 0.3s ease;
+          " onmouseover="this.style.background='#c0392b'" onmouseout="this.style.background='var(--danger)'">
+            <i class="fas fa-sign-out-alt" style="margin-right: 5px;"></i>Logout
+          </button>
+        </div>
         <div class="theme-switch-wrapper">
           <label class="theme-switch" for="checkbox">
             <input type="checkbox" id="checkbox" />
@@ -1429,5 +1547,6 @@
       }
     };
   </script>
+  </div> <!-- End mainContent -->
 </body>
 </html>
