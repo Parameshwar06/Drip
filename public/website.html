@@ -44,7 +44,7 @@
       z-index: -1;
     }
 
-    /* Landing content */
+    /* Landing content with liquid glass effect */
     .content {
       position: relative;
       z-index: 1;
@@ -56,41 +56,159 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      background: rgba(0, 0, 0, 0.4); /* optional dark overlay for readability */
+      background: linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7));
+      backdrop-filter: blur(10px);
+    }
+
+    /* Hero content card */
+    .hero-card {
+      background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.1),
+        rgba(255, 255, 255, 0.05)
+      );
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 32px;
+      padding: 60px 50px;
+      max-width: 900px;
+      width: 90%;
+      box-shadow: 
+        0 12px 40px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+        0 1px 0 rgba(255, 255, 255, 0.1);
+      animation: slideUp 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.5), 
+        transparent
+      );
+    }
+
+    .hero-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.08), 
+        transparent
+      );
+      animation: shimmer 4s infinite;
+      pointer-events: none;
     }
 
     h1 {
-      font-size: 3em;
-      margin-bottom: 15px;
+      font-size: 3.5em;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #ffffff, #e0e0e0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      font-weight: 700;
+      letter-spacing: -1px;
     }
 
     p {
-      font-size: 1.2em;
-      margin-bottom: 25px;
+      font-size: 1.3em;
+      margin-bottom: 35px;
+      color: rgba(255, 255, 255, 0.9);
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+      line-height: 1.6;
+      max-width: 600px;
     }
 
     button {
-      padding: 12px 25px;
-      font-size: 1em;
-      border: none;
-      border-radius: 5px;
-      background: rgba(255, 255, 255, 0.8);
+      padding: 18px 32px;
+      font-size: 1.1em;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 18px;
+      background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.15),
+        rgba(255, 255, 255, 0.08)
+      );
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      color: white;
       cursor: pointer;
-      transition: background 0.3s;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       margin: 0 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 
+        0 8px 25px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+
+    button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.2), 
+        transparent
+      );
+      transition: left 0.6s ease;
     }
 
     button:hover {
-      background: rgba(255, 255, 255, 1);
+      transform: translateY(-3px);
+      background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.25),
+        rgba(255, 255, 255, 0.15)
+      );
+      box-shadow: 
+        0 15px 35px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+        0 0 20px rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    button:hover::before {
+      left: 100%;
     }
 
     .login-button {
-      background: rgba(102, 126, 234, 0.8);
-      color: white;
+      background: linear-gradient(135deg, 
+        rgba(103, 126, 234, 0.8),
+        rgba(118, 75, 162, 0.8)
+      );
+      box-shadow: 
+        0 8px 25px rgba(103, 126, 234, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
     }
 
     .login-button:hover {
-      background: rgba(102, 126, 234, 1);
+      background: linear-gradient(135deg, 
+        rgba(103, 126, 234, 0.9),
+        rgba(118, 75, 162, 0.9)
+      );
+      box-shadow: 
+        0 15px 35px rgba(103, 126, 234, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+        0 0 20px rgba(255, 255, 255, 0.1);
     }
 
     .button-container {
@@ -126,6 +244,89 @@
       background: rgba(255, 255, 255, 0.2);
       transform: translateY(-2px);
     }
+
+    /* Animations */
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(50px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes shimmer {
+      0% {
+        left: -100%;
+      }
+      50% {
+        left: 100%;
+      }
+      100% {
+        left: 100%;
+      }
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+      }
+      33% {
+        transform: translateY(-10px) rotate(1deg);
+      }
+      66% {
+        transform: translateY(5px) rotate(-1deg);
+      }
+    }
+
+    /* Floating glass orbs */
+    .glass-orb {
+      position: absolute;
+      border-radius: 50%;
+      background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.1),
+        rgba(255, 255, 255, 0.05)
+      );
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      animation: float 6s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .glass-orb-1 {
+      width: 120px;
+      height: 120px;
+      top: 15%;
+      left: 10%;
+      animation-delay: 0s;
+    }
+
+    .glass-orb-2 {
+      width: 80px;
+      height: 80px;
+      top: 60%;
+      right: 15%;
+      animation-delay: 2s;
+    }
+
+    .glass-orb-3 {
+      width: 100px;
+      height: 100px;
+      bottom: 20%;
+      left: 8%;
+      animation-delay: 4s;
+    }
+
+    .glass-orb-4 {
+      width: 60px;
+      height: 60px;
+      top: 30%;
+      right: 25%;
+      animation-delay: 1s;
+    }
   </style>
 </head>
 <body>
@@ -143,11 +344,20 @@
 
   <!-- Landing Page Content -->
   <div class="content">
-    <h1>Welcome to Smart Irrigation </h1>
-    <p>Revolutionizing farming with Smart Irrigation</p>
-    <div class="button-container">
-      <button onclick="window.location.href='home.html'">Get Started</button>
-      <button class="login-button" onclick="window.location.href='login.html'">Login</button>
+    <!-- Floating Glass Orbs -->
+    <div class="glass-orb glass-orb-1"></div>
+    <div class="glass-orb glass-orb-2"></div>
+    <div class="glass-orb glass-orb-3"></div>
+    <div class="glass-orb glass-orb-4"></div>
+    
+    <!-- Hero Content Card -->
+    <div class="hero-card">
+      <h1>Welcome to Smart Irrigation</h1>
+      <p>Revolutionizing farming with precision IoT technology. Monitor soil moisture, control water flow, and optimize crop yields with real-time analytics and intelligent automation.</p>
+      <div class="button-container">
+        <button onclick="window.location.href='home.html'">Get Started</button>
+        <button class="login-button" onclick="window.location.href='login.html'">Login</button>
+      </div>
     </div>
   </div>
 </body>
