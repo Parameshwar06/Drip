@@ -3,7 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Register - Smart Irrigation</title>
+  <title>Register - Smart Irrigation System</title>
+  <meta name="description" content="Create account for Smart Drip Irrigation IoT Dashboard - Join our secure agricultural technology platform">
+  <meta name="keywords" content="smart irrigation, IoT, agriculture, water management, farming, registration">
+  <meta name="author" content="Smart Irrigation Systems">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://drip-anurag.web.app/register.html">
+  
+  <!-- Security Headers -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://www.gstatic.com https://securetoken.googleapis.com https://identitytoolkit.googleapis.com https://firebase.googleapis.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:;">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-Frame-Options" content="DENY">
+  <meta http-equiv="X-XSS-Protection" content="1; mode=block">
   <style>
     body, html {
       margin: 0;
@@ -33,20 +44,28 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background: rgba(0, 0, 0, 0.5);
+      background: linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7));
+      backdrop-filter: blur(10px);
       overflow-y: auto;
       padding: 20px 0;
     }
 
     .register-card {
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 20px;
-      padding: 40px;
-      width: 400px;
+      background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.1),
+        rgba(255, 255, 255, 0.05)
+      );
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 24px;
+      padding: 50px 40px;
+      width: 420px;
       max-width: 90%;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+        0 1px 0 rgba(255, 255, 255, 0.1);
       text-align: center;
       animation: slideUp 0.6s ease-out;
       margin: auto;

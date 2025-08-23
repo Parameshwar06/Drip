@@ -3,7 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - Smart Irrigation</title>
+  <title>Login - Smart Irrigation System</title>
+  <meta name="description" content="Secure login for Smart Drip Irrigation IoT Dashboard - Monitor and control your irrigation system remotely">
+  <meta name="keywords" content="smart irrigation, IoT, agriculture, water management, farming">
+  <meta name="author" content="Smart Irrigation Systems">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://drip-anurag.web.app/login.html">
+  
+  <!-- Security Headers -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://www.gstatic.com https://securetoken.googleapis.com https://identitytoolkit.googleapis.com https://firebase.googleapis.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:;">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-Frame-Options" content="DENY">
+  <meta http-equiv="X-XSS-Protection" content="1; mode=block">
   <style>
     body, html {
       margin: 0;
@@ -33,31 +44,134 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background: rgba(0, 0, 0, 0.5);
+      background: linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7));
+      backdrop-filter: blur(10px);
     }
 
     .login-card {
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 20px;
-      padding: 40px;
-      width: 400px;
+      background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.1),
+        rgba(255, 255, 255, 0.05)
+      );
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 24px;
+      padding: 50px 40px;
+      width: 420px;
       max-width: 90%;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+        0 1px 0 rgba(255, 255, 255, 0.1);
       text-align: center;
-      animation: slideUp 0.6s ease-out;
+      animation: slideUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.4), 
+        transparent
+      );
+    }
+
+    .login-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.1), 
+        transparent
+      );
+      animation: shimmer 3s infinite;
+      pointer-events: none;
     }
 
     @keyframes slideUp {
       from {
         opacity: 0;
-        transform: translateY(30px);
+        transform: translateY(50px) scale(0.95);
       }
       to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0) scale(1);
       }
+    }
+
+    @keyframes shimmer {
+      0% {
+        left: -100%;
+      }
+      50% {
+        left: 100%;
+      }
+      100% {
+        left: 100%;
+      }
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+      }
+      33% {
+        transform: translateY(-10px) rotate(1deg);
+      }
+      66% {
+        transform: translateY(5px) rotate(-1deg);
+      }
+    }
+
+    /* Enhanced glass morphism effects */
+    .glass-orb {
+      position: absolute;
+      border-radius: 50%;
+      background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.1),
+        rgba(255, 255, 255, 0.05)
+      );
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      animation: float 6s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .glass-orb-1 {
+      width: 80px;
+      height: 80px;
+      top: 10%;
+      left: 10%;
+      animation-delay: 0s;
+    }
+
+    .glass-orb-2 {
+      width: 60px;
+      height: 60px;
+      top: 70%;
+      right: 15%;
+      animation-delay: 2s;
+    }
+
+    .glass-orb-3 {
+      width: 100px;
+      height: 100px;
+      bottom: 20%;
+      left: 5%;
+      animation-delay: 4s;
     }
 
     .login-header {
@@ -79,55 +193,127 @@
     }
 
     .form-group {
-      margin-bottom: 20px;
+      margin-bottom: 25px;
       text-align: left;
+      position: relative;
     }
 
     .form-group label {
       display: block;
-      color: white;
-      margin-bottom: 8px;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 10px;
       font-weight: 500;
-      font-size: 0.9em;
+      font-size: 0.95em;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+      letter-spacing: 0.5px;
     }
 
     .form-input {
       width: 100%;
-      padding: 15px 20px;
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      border-radius: 12px;
-      background: rgba(255, 255, 255, 0.1);
+      padding: 18px 24px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 18px;
+      background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.1),
+        rgba(255, 255, 255, 0.05)
+      );
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
       color: white;
       font-size: 1em;
-      transition: all 0.3s ease;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       box-sizing: border-box;
+      position: relative;
+      z-index: 1;
     }
 
     .form-input::placeholder {
-      color: rgba(255, 255, 255, 0.6);
+      color: rgba(255, 255, 255, 0.5);
+      transition: all 0.3s ease;
     }
 
     .form-input:focus {
       outline: none;
-      border-color: rgba(255, 255, 255, 0.6);
-      background: rgba(255, 255, 255, 0.15);
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.15),
+        rgba(255, 255, 255, 0.08)
+      );
+      box-shadow: 
+        0 0 0 1px rgba(255, 255, 255, 0.1),
+        0 12px 30px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .form-input:focus::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+      transform: translateX(4px);
     }
 
     .login-button {
       width: 100%;
-      padding: 15px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 18px 24px;
+      background: linear-gradient(135deg, 
+        rgba(103, 126, 234, 0.8),
+        rgba(118, 75, 162, 0.8)
+      );
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       color: white;
-      border: none;
-      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 18px;
       font-size: 1.1em;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.3s ease;
-      margin-top: 10px;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      margin-top: 15px;
       text-transform: uppercase;
       letter-spacing: 1px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 
+        0 8px 25px rgba(103, 126, 234, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+
+    .login-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.2), 
+        transparent
+      );
+      transition: left 0.6s ease;
+    }
+
+    .login-button:hover {
+      background: linear-gradient(135deg, 
+        rgba(103, 126, 234, 0.9),
+        rgba(118, 75, 162, 0.9)
+      );
+      transform: translateY(-3px);
+      box-shadow: 
+        0 15px 35px rgba(103, 126, 234, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+        0 0 20px rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .login-button:hover::before {
+      left: 100%;
+    }
+
+    .login-button:active {
+      transform: translateY(-1px);
+      box-shadow: 
+        0 8px 20px rgba(103, 126, 234, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
     }
 
     .login-button:hover {
@@ -306,6 +492,11 @@
 
   <!-- Login Container -->
   <div class="login-container">
+    <!-- Floating Glass Orbs -->
+    <div class="glass-orb glass-orb-1"></div>
+    <div class="glass-orb glass-orb-2"></div>
+    <div class="glass-orb glass-orb-3"></div>
+    
     <div class="login-card">
       <div class="login-header">
         <h1>Welcome Back</h1>

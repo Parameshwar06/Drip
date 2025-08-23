@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Smart Drip Irrigation IoT System
+# Professional Agricultural Technology Platform
+# https://drip-anurag.web.app
+
+Sitemap: https://drip-anurag.web.app/sitemap.xml
