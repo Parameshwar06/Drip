@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="logo.png">
+  <title> SlopeFlow - IoT Farming Solutions </title>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #2e7d32;
+      --secondary: #7cb342;
+      --accent: #f9a825;
+      --light: #f1f8e9;
+      --dark: #1b5e20;
+      --gray: #f5f5f5;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--light);
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Header Styles */
+    header {
+      background-color: white;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 0;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo img {
+      height: 50px;
+      margin-right: 10px;
+    }
+
+    .logo h1 {
+      color: var(--primary);
+      font-size: 24px;
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+    }
+
+    nav ul li {
+      margin-left: 30px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: var(--dark);
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    nav ul li a:hover {
+      color: var(--secondary);
+    }
+
+    .auth-buttons {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .auth-buttons button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background 0.3s;
+    }
+
+    .auth-buttons button:hover {
+      background: var(--dark);
+    }
+
+    /* Language Selector */
+    .lang-select {
+      display: flex;
+      align-items: center;
+      margin-right: 15px;
+      position: relative;
+    }
+
+    .lang-select select {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background-color: white;
+      cursor: pointer;
+      appearance: none;
+      padding-right: 30px;
+    }
+
+    .lang-select i {
+      position: absolute;
+      right: 10px;
+      pointer-events: none;
+    }
+
+    /* Voice Button */
+    .voice-assist button {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .voice-assist button:hover {
+      background: #e65100;
+    }
+
+    /* Hero Section */
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 400px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: white;
+    }
+
+    .bg-video {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      min-width: 100%;
+      min-height: 100%;
+      transform: translate(-50%, -50%);
+      object-fit: cover;
+      z-index: -1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero h2 {
+      font-size: 3rem;
+      margin-bottom: 20px;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      max-width: 700px;
+      margin: 0 auto 30px;
+    }
+
+    .cta-button {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 5px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .cta-button:hover {
+      background: #e65100;
+    }
+
+    /* About Section */
+    .about-section {
+      padding: 60px 0;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 40px;
+      color: var(--primary);
+      font-size: 2.2rem;
+    }
+
+    .about-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .about-image {
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .about-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .about-text h3 {
+      color: var(--dark);
+      margin-bottom: 20px;
+      font-size: 1.8rem;
+    }
+
+    .about-text p {
+      margin-bottom: 15px;
+      line-height: 1.8;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .feature-item {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+      transition: transform 0.3s;
+    }
+
+    .feature-item:hover {
+      transform: translateY(-5px);
+    }
+
+    .feature-item i {
+      font-size: 2rem;
+      color: var(--secondary);
+      margin-bottom: 15px;
+    }
+
+    .feature-item h4 {
+      color: var(--dark);
+      margin-bottom: 10px;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--dark);
+      color: white;
+      padding: 60px 0 30px;
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+
+    .footer-column h3 {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+      color: var(--accent);
+    }
+
+    .footer-column ul {
+      list-style: none;
+    }
+
+    .footer-column ul li {
+      margin-bottom: 10px;
+    }
+
+    .footer-column ul li a {
+      color: #ddd;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer-column ul li a:hover {
+      color: white;
+    }
+
+    .social-icons {
+      display: flex;
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    #para { font-size: medium; }
+
+    .social-icons a {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      color: white;
+      transition: background 0.3s;
+    }
+
+    .social-icons a:hover {
+      background: var(--primary);
+    }
+
+    .copyright {
+      text-align: center;
+      padding-top: 30px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Translation loading indicator */
+    .translating {
+      position: relative;
+    }
+
+    .translating::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 16px;
+      height: 16px;
+      margin: -8px 0 0 -8px;
+      border: 2px solid #f3f3f3;
+      border-top: 2px solid var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      nav ul {
+        margin: 20px 0;
+      }
+
+      .hero h2 {
+        font-size: 2.2rem;
+      }
+
+      .auth-buttons {
+        display: flex;
+        justify-content: center;
+        margin-top: 15px;
+      }
+      
+      .lang-select {
+        margin-right: 0;
+        margin-bottom: 10px;
+      }
+      
+      .about-content {
+        grid-template-columns: 1fr;
+      }
+      
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header with Navigation -->
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <img src="logo.png" alt="">
+          <h1>SlopeFlow</h1>
+        </div>
+
+        <!-- Main Navigation -->
+        <nav>
+          <ul>
+            <li><a href="#" data-translate="Home">Home</a></li>
+            <li><a href="#about" data-translate="About Us">About Us</a></li>
+            <li><a href="#" data-translate="Contact">Contact</a></li>
+          </ul>
+        </nav>
+
+        <!-- Auth Buttons -->
+        <div class="auth-buttons">
+          <div class="lang-select">
+            <select id="language">
+              <option value="en">English</option>
+              <option value="hi">Hindi</option>
+              <option value="ta">Tamil</option>
+              <option value="te">Telugu</option>
+              <option value="kn">Kannada</option>
+              <option value="fr">French</option>
+              <option value="es">Spanish</option>
+              <option value="de">German</option>
+            </select>
+            <i class="fas fa-globe"></i>
+          </div>
+          <div class="voice-assist">
+            <button id="voiceBtn"><i class="fas fa-microphone"></i></button>
+          </div>
+          <button onclick="window.location.href='login.html'" data-translate="Login">Login</button>
+          <button onclick="window.location.href='signup.html'" data-translate="Sign Up">Sign Up</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <video autoplay muted loop playsinline class="bg-video">
+      <source src="video.mp4" type="video/mp4">
+      Your browser does not support HTML5 video.
+    </video>
+
+    <div class="hero-content">
+      <h2 data-translate="Empowering Farmers with Smart Irrigation">Empowering Farmers with Smart Irrigation</h2>
+      <p id="para" data-translate="Save water, cut energy costs, and grow healthier crops using intelligent solar-powered systems.">Save water, cut energy costs, and grow healthier crops using intelligent solar-powered systems.</p>
+      <button class="cta-button" data-translate="Get Started">Get Started</button>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="about-section container">
+    <h2 class="section-title" data-translate="About SlopeFlow">About SlopeFlow</h2>
+    
+    <div class="about-content">
+      <div class="about-image">
+        <img src="https://images.unsplash.com/photo-1625246333197-1c86d7043f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="SlopeFlow Irrigation System">
+      </div>
+      
+      <div class="about-text">
+        <h3 data-translate="Revolutionizing Agriculture in Hilly Regions">Revolutionizing Agriculture in Hilly Regions</h3>
+        <p data-translate="SlopeFlow is an innovative IoT-based irrigation solution specifically designed for challenging terrains like hills and slopes. Our system combines solar power, smart sensors, and precision drip irrigation to optimize water usage and increase crop yields in areas where traditional farming methods struggle.">SlopeFlow is an innovative IoT-based irrigation solution specifically designed for challenging terrains like hills and slopes. Our system combines solar power, smart sensors, and precision drip irrigation to optimize water usage and increase crop yields in areas where traditional farming methods struggle.</p>
+        
+        <p data-translate="The system uses gravity-fed water distribution with pressure compensation to ensure even water distribution across varying elevations. Solar panels power the entire system, making it energy-independent and environmentally friendly.">The system uses gravity-fed water distribution with pressure compensation to ensure even water distribution across varying elevations. Solar panels power the entire system, making it energy-independent and environmentally friendly.</p>
+        
+        <div class="features-grid">
+          <div class="feature-item">
+            <i class="fas fa-tint"></i>
+            <h4 data-translate="Smart Drip Irrigation"><a href="irrigation1.html"> Drip Irrigation</a></h4>
+            <p data-translate="Delivers the right amount of water,at the right time saving every drop while keeping crops healthier and greener.">Delivers the right amount of water,at the right time saving every drop while keeping crops healthier and greener.</p>
+          </div>
+          
+          <div class="feature-item">
+            <i class="fas fa-solar-panel"></i>
+            <h4 data-translate="Solar Powered"><a href="solarpanel1.html">Solar Powered</a></h4>
+            <p data-translate="Powering the farm with the sun -our smart solar panels capture clean energy,fueling pumps,sensors,and irrigation,all while saving costs and the planet">Powering the farm with the sun -our smart solar panels capture clean energy,fueling pumps,sensors,and irrigation,all while saving costs and the planet</p>
+          </div>
+          
+          <div class="feature-item">
+            <i class="fas fa-mountain"></i>
+            <h4 data-translate="Report"><a href="report.html">Report</a></h4>
+            <p data-translate="Your farm at a glance real-time reports turn sensor data into clear insights,helping you tract water,energy and crop health instantly. ">Your farm at a glance real-time reports turn sensor data into clear insights,helping you tract water,energy and crop health instantly.</p>
+          </div>
+          
+          <div class="feature-item">
+            <i class="fas fa-microchip"></i>
+            <h4 data-translate="IoT Monitoring">IoT Monitoring</h4>
+            <p data-translate="Real-time soil moisture and weather data for optimal irrigation">Real-time soil moisture and weather data for optimal irrigation</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-column">
+          <h3 data-translate="SlopeFlow Solutions">SlopeFlow Solutions</h3>
+          <p data-translate="Transforming agriculture in challenging terrains through IoT technology and smart irrigation solutions.">Transforming agriculture in challenging terrains through IoT technology and smart irrigation solutions.</p>
+          <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+
+        <div class="footer-column">
+          <h3 data-translate="Quick Links">Quick Links</h3>
+          <ul>
+            <li><a href="#" data-translate="Home">Home</a></li>
+            <li><a href="#about" data-translate="About Us">About Us</a></li>
+            <li><a href="#" data-translate="Contact">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h3 data-translate="Our Technology">Our Technology</h3>
+          <ul>
+            <li><a href="#" data-translate="Solar Pump Controllers">Solar Pump Controllers</a></li>
+            <li><a href="#" data-translate="Drip Irrigation Systems">Drip Irrigation Systems</a></li>
+            <li><a href="#" data-translate="Soil Sensors">Soil Sensors</a></li>
+            <li><a href="#" data-translate="Monitoring Dashboard">Monitoring Dashboard</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h3 data-translate="Contact Us">Contact Us</h3>
+          <ul>
+            <li><i class="fas fa-map-marker-alt"></i> <span data-translate="123 FarmTech Avenue, AgriZone">123 FarmTech Avenue, AgriZone</span></li>
+            <li><i class="fas fa-phone"></i> +1 234 567 8900</li>
+            <li><i class="fas fa-envelope"></i> info@slopeflow.com</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="copyright">
+        <p>&copy; 2025 SlopeFlow Solutions. <span data-translate="All rights reserved.">All rights reserved.</span></p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Translation API endpoint
+    const apiUrl = "https://api.mymemory.translated.net/get";
+    const translationCache = {};
+    
+    function setElementLoading(element, isLoading) {
+      if (isLoading) {
+        element.classList.add('translating');
+      } else {
+        element.classList.remove('translating');
+      }
+    }
+    function setAllLoading(isLoading) {
+      const elements = document.querySelectorAll("[data-translate]");
+      elements.forEach(el => {
+        setElementLoading(el, isLoading);
+      });
+    }
+
+    async function translateText(text, lang) {
+      if (lang === 'en') return text;
+      const cacheKey = `${lang}:${text}`;
+      if (translationCache[cacheKey]) return translationCache[cacheKey];
+      try {
+        const response = await fetch(`${apiUrl}?q=${encodeURIComponent(text)}&langpair=en|${lang}`);
+        const data = await response.json();
+        if (data && data.responseData && data.responseData.translatedText) {
+          const translatedText = data.responseData.translatedText;
+          translationCache[cacheKey] = translatedText;
+          return translatedText;
+        } else {
+          throw new Error('API translation failed');
+        }
+      } catch (error) {
+        console.warn('API translation failed:', error);
+        return text;
+      }
+    }
+
+    async function translatePage(lang) {
+      const elements = document.querySelectorAll("[data-translate]");
+      setAllLoading(true);
+      for (let el of elements) {
+        const originalText = el.getAttribute("data-translate");
+        if (lang === "en") {
+          el.innerText = originalText;
+        } else {
+          const translatedText = await translateText(originalText, lang);
+          el.innerText = translatedText;
+        }
+        setElementLoading(el, false);
+      }
+    }
+
+    document.getElementById("language").addEventListener("change", (e) => {
+      const lang = e.target.value;
+      translatePage(lang);
+      localStorage.setItem('preferredLanguage', lang);
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const savedLang = localStorage.getItem('preferredLanguage');
+      if (savedLang && savedLang !== 'en') {
+        document.getElementById('language').value = savedLang;
+        translatePage(savedLang);
+      }
+    });
+
+    // ====================
+    // Voice Assistance
+    // ====================
+    const voiceBtn = document.getElementById("voiceBtn");
+    const languageSelector = document.getElementById("language");
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+    // Language Map for better voice accuracy
+    const langMap = {
+      en: "en-US",
+      hi: "hi-IN",
+      ta: "ta-IN",
+      te: "te-IN",
+      kn: "kn-IN",
+      fr: "fr-FR",
+      es: "es-ES",
+      de: "de-DE"
+    };
+
+    // Start Listening
+    voiceBtn.addEventListener("click", () => {
+      const lang = languageSelector.value || "en";
+      recognition.lang = langMap[lang] || "en-US";
+      recognition.start();
+    });
+
+    // On Speech Result
+    recognition.onresult = (event) => {
+      const userSpeech = event.results[0][0].transcript;
+      console.log("User said:", userSpeech);
+      // Speak back
+      speakText(userSpeech, recognition.lang);
+    };
+
+    function speakText(text, lang = "en-US") {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = lang;
+      speechSynthesis.speak(utterance);
+    }
+
+    recognition.onerror = (e) => {
+      console.error("Speech recognition error:", e.error);
+    };
+  </script>
+</body>
+</html>

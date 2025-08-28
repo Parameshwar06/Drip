@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farm Reports & Analytics</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4efe9 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #2c3e50 0%, #4a6491 100%);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .language-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .lang-btn {
+            padding: 8px 15px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .lang-btn.active {
+            background: white;
+            color: #2c3e50;
+        }
+        
+        .report-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .time-selector {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .time-btn {
+            padding: 12px 20px;
+            background: #4a6491;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+        
+        .time-btn:hover {
+            background: #3a5079;
+        }
+        
+        .time-btn.active {
+            background: #2c3e50;
+        }
+        
+        .download-options {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .download-btn {
+            padding: 12px 20px;
+            background: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+        
+        .download-btn:hover {
+            background: #388e3c;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        @media (max-width: 900px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .card-title i {
+            font-size: 1.6rem;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .stat-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .water-icon {
+            color: #007aff;
+        }
+        
+        .solar-icon {
+            color: #ff9500;
+        }
+        
+        .yield-icon {
+            color: #4caf50;
+        }
+        
+        .savings-icon {
+            color: #f44336;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+        
+        .report-summary {
+            margin-top: 30px;
+        }
+        
+        .summary-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        
+        .summary-content {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            line-height: 1.6;
+        }
+        
+        .summary-item {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .summary-item i {
+            color: #4a6491;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        select {
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            background: white;
+            font-size: 1rem;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4caf50;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            display: none;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div class="notification" id="notification"></div>
+    
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-chart-line"></i> <span id="header-title">Farm Reports & Analytics</span></h1>
+            <p class="subtitle" id="header-subtitle">Comprehensive reports for your farming operations</p>
+        </header>
+        
+        <div class="report-controls">
+            <div class="time-selector">
+                <button class="time-btn active" data-period="day">
+                    <i class="fas fa-calendar-day"></i> <span class="time-btn-text">Daily Report</span>
+                </button>
+                <button class="time-btn" data-period="week">
+                    <i class="fas fa-calendar-week"></i> <span class="time-btn-text">Weekly Report</span>
+                </button>
+                <button class="time-btn" data-period="month">
+                    <i class="fas fa-calendar-alt"></i> <span class="time-btn-text">Monthly Report</span>
+                </button>
+            </div>
+            
+            <div class="download-options">
+                <select id="downloadLang">
+                    <option value="en">English</option>
+                    <option value="hi">हिंदी</option>
+                    <option value="te">తెలుగు</option>
+                    <option value="ta">தமிழ்</option>
+                    <option value="kn">ಕನ್ನಡ</option>
+                    <option value="ml">മലയാളം</option>
+                    <option value="bn">বাংলা</option>
+                    <option value="mr">मराठी</option>
+                    <option value="gu">ગુજરાતી</option>
+                    <option value="pa">ਪੰਜਾਬੀ</option>
+                </select>
+                <button class="download-btn" id="downloadPdf">
+                    <i class="fas fa-file-pdf"></i> <span class="download-btn-text">Download PDF</span>
+                </button>
+                <button class="download-btn" id="downloadExcel">
+                    <i class="fas fa-file-excel"></i> <span class="download-btn-text">Download Excel</span>
+                </button>
+            </div>
+        </div>
+        
+        <div class="dashboard">
+            <div class="card">
+                <div class="card-title">
+                    <i class="fas fa-tint"></i> <span class="card-title-text">Water Usage Analytics</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="waterChart"></canvas>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon water-icon">
+                            <i class="fas fa-tint"></i>
+                        </div>
+                        <div class="stat-value">5,240L</div>
+                        <div class="stat-label stat-label-water">Water Used</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon savings-icon">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="stat-value">1,580L</div>
+                        <div class="stat-label stat-label-saved">Water Saved</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">
+                    <i class="fas fa-solar-panel"></i> <span class="card-title-text">Solar Energy Analytics</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="solarChart"></canvas>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon solar-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <div class="stat-value">42 kWh</div>
+                        <div class="stat-label stat-label-energy">Energy Generated</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon savings-icon">
+                            <i class="fas fa-plug"></i>
+                        </div>
+                        <div class="stat-value">78%</div>
+                        <div class="stat-label stat-label-efficiency">Efficiency</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-title">
+                <i class="fas fa-seedling"></i> <span class="card-title-text">Crop Yield Report</span>
+            </div>
+            <div class="chart-container">
+                <canvas id="yieldChart"></canvas>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon yield-icon">
+                        <i class="fas fa-weight-hanging"></i>
+                    </div>
+                    <div class="stat-value">425 kg</div>
+                    <div class="stat-label stat-label-total">Total Yield</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon savings-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-value">+18%</div>
+                    <div class="stat-label stat-label-increase">Yield Increase</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card report-summary">
+            <div class="card-title">
+                <i class="fas fa-file-alt"></i> <span class="card-title-text">Executive Summary</span>
+            </div>
+            
+            <div class="summary-content">
+                <div class="summary-title" id="summary-title">July 2023 Performance Overview</div>
+                
+                <div class="summary-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span id="summary-item-1">Water usage decreased by 15% compared to last month</span>
+                </div>
+                
+                <div class="summary-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span id="summary-item-2">Solar efficiency reached 78%, exceeding the target of 70%</span>
+                </div>
+                
+                <div class="summary-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span id="summary-item-3">Crop yield increased by 18% due to optimized irrigation</span>
+                </div>
+                
+                <div class="summary-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span id="summary-item-4">Saved ₹2,450 in energy costs through solar power</span>
+                </div>
+                
+                <div class="summary-item">
+                    <i class="fas fa-lightbulb"></i>
+                    <span id="summary-item-5"><strong>Recommendation:</strong> Continue current irrigation schedule and consider expanding solar capacity</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p><i class="fas fa-info-circle"></i> <span id="footer-text">Reports are generated based on your farm's sensor data and AI analysis</span></p>
+            <p>© 2025 Farm Analytics Dashboard | Smart Farming Solutions</p>
+        </div>
+    </div>
+
+    <script>
+        // Translation API
+        const translateApiUrl = "https://api.mymemory.translated.net/get";
+        const translateCache = {};
+        async function translateText(text, lang){
+            if (!text) return text;
+            if (lang === 'en') return text;
+            const key = `${lang}:${text}`;
+            if (translateCache[key]) return translateCache[key];
+            try {
+                const r = await fetch(`${translateApiUrl}?q=${encodeURIComponent(text)}&langpair=en|${lang}`);
+                const j = await r.json();
+                const t = j?.responseData?.translatedText || text;
+                translateCache[key] = t; return t;
+            } catch { return text; }
+        }
+        function setBaseAttr(el){ if (el && !el.getAttribute('data-translate')) el.setAttribute('data-translate', el.textContent.trim()); }
+        function markTranslatable(){
+            ['#header-title','#header-subtitle','.time-btn-text','.download-btn-text','.card-title-text','.stat-label','#summary-title','#summary-item-1','#summary-item-2','#summary-item-3','#summary-item-4','#summary-item-5','#footer-text'].forEach(sel => {
+                document.querySelectorAll(sel).forEach(setBaseAttr);
+            });
+        }
+        async function translatePage(lang){
+            const nodes = document.querySelectorAll('[data-translate]');
+            for (const el of nodes){
+                const base = el.getAttribute('data-translate');
+                el.textContent = await translateText(base, lang);
+            }
+            await translateCharts(lang);
+        }
+
+        // Initialize charts
+        const waterCtx = document.getElementById('waterChart').getContext('2d');
+        const solarCtx = document.getElementById('solarChart').getContext('2d');
+        const yieldCtx = document.getElementById('yieldChart').getContext('2d');
+        
+        // Water usage chart
+        const waterChart = new Chart(waterCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [{
+                    label: 'Water Used (Liters)',
+                    data: [820, 932, 901, 834, 790, 870, 920],
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Weekly Water Consumption'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Liters'
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Solar energy chart
+        const solarChart = new Chart(solarCtx, {
+            type: 'line',
+            data: {
+                labels: ['6AM', '9AM', '12PM', '3PM', '6PM', '9PM'],
+                datasets: [{
+                    label: 'Energy Generation (kWh)',
+                    data: [2, 8, 14, 12, 6, 1],
+                    fill: true,
+                    backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                    borderColor: 'rgba(255, 159, 64, 1)',
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Daily Solar Energy Generation'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'kWh'
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Crop yield chart
+        const yieldChart = new Chart(yieldCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Wheat', 'Rice', 'Vegetables', 'Pulses'],
+                datasets: [{
+                    label: 'Yield Distribution',
+                    data: [180, 120, 80, 45],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(153, 102, 255, 0.6)',
+                        'rgba(255, 159, 64, 0.6)',
+                        'rgba(255, 99, 132, 0.6)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Crop Yield Distribution'
+                    }
+                }
+            }
+        });
+        
+        // Time period selection
+        const timeButtons = document.querySelectorAll('.time-btn');
+        timeButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                timeButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                const period = this.dataset.period;
+                updateCharts(period);
+                updateSummary(period);
+            });
+        });
+        
+        // Update charts based on selected time period
+        function updateCharts(period) {
+            let waterLabels, waterData, solarLabels, solarData, yieldLabels, yieldData;
+            
+            if (period === 'day') {
+                waterLabels = ['6AM', '9AM', '12PM', '3PM', '6PM', '9PM'];
+                waterData = [120, 180, 220, 150, 100, 50];
+                
+                solarLabels = ['6AM', '9AM', '12PM', '3PM', '6PM', '9PM'];
+                solarData = [2, 8, 14, 12, 6, 1];
+                
+                yieldLabels = ['Wheat', 'Rice', 'Vegetables', 'Pulses'];
+                yieldData = [180, 120, 80, 45];
+            } else if (period === 'week') {
+                waterLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                waterData = [820, 932, 901, 834, 790, 870, 920];
+                
+                solarLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                solarData = [38, 42, 45, 40, 35, 38, 42];
+                
+                yieldLabels = ['Wheat', 'Rice', 'Vegetables', 'Pulses'];
+                yieldData = [425, 280, 195, 100];
+            } else {
+                waterLabels = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
+                waterData = [3200, 2950, 2800, 2740];
+                
+                solarLabels = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
+                solarData = [150, 165, 170, 175];
+                
+                yieldLabels = ['Wheat', 'Rice', 'Vegetables', 'Pulses'];
+                yieldData = [1800, 1200, 800, 450];
+            }
+            
+            // Update water chart
+            waterChart.data.labels = waterLabels;
+            waterChart.data.datasets[0].data = waterData;
+            waterChart.update();
+            
+            // Update solar chart
+            solarChart.data.labels = solarLabels;
+            solarChart.data.datasets[0].data = solarData;
+            solarChart.update();
+            
+            // Update yield chart
+            yieldChart.data.datasets[0].data = yieldData;
+            yieldChart.update();
+        }
+        
+        // Update summary based on selected time period
+        function updateSummary(period) {
+            const summaryTitle = document.getElementById('summary-title');
+            
+            if (period === 'day') {
+                summaryTitle.textContent = "Today's Performance Overview";
+            } else if (period === 'week') {
+                summaryTitle.textContent = "This Week's Performance Overview";
+            } else {
+                summaryTitle.textContent = "July 2023 Performance Overview";
+            }
+        }
+        
+        // Chart translation
+        const chartTitleBases = {
+            water: 'Weekly Water Consumption',
+            solar: 'Daily Solar Energy Generation',
+            yield: 'Crop Yield Distribution',
+            yLiters: 'Liters',
+            yKwh: 'kWh',
+            waterDataset: 'Water Used (Liters)',
+            solarDataset: 'Energy Generation (kWh)'
+        };
+        async function translateCharts(lang){
+            if (waterChart){
+                waterChart.options.plugins.title.text = await translateText(chartTitleBases.water, lang);
+                waterChart.options.scales.y.title.text = await translateText(chartTitleBases.yLiters, lang);
+                waterChart.data.datasets[0].label = await translateText(chartTitleBases.waterDataset, lang);
+                waterChart.update();
+            }
+            if (solarChart){
+                solarChart.options.plugins.title.text = await translateText(chartTitleBases.solar, lang);
+                solarChart.options.scales.y.title.text = await translateText(chartTitleBases.yKwh, lang);
+                solarChart.data.datasets[0].label = await translateText(chartTitleBases.solarDataset, lang);
+                solarChart.update();
+            }
+            if (yieldChart){
+                yieldChart.options.plugins.title.text = await translateText(chartTitleBases.yield, lang);
+                yieldChart.update();
+            }
+        }
+        
+        // Download functionality
+        document.getElementById('downloadPdf').addEventListener('click', async function() {
+            const lang = document.getElementById('downloadLang').value;
+            await translatePage(lang);
+            downloadPdfReport(lang);
+        });
+        
+        document.getElementById('downloadExcel').addEventListener('click', async function() {
+            const lang = document.getElementById('downloadLang').value;
+            await translatePage(lang);
+            downloadExcelReport(lang);
+        });
+        
+        // Download PDF report
+        async function downloadPdfReport(lang) {
+            try {
+                showNotification(`Preparing PDF report in ${getLanguageName(lang)}...`);
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF('p', 'pt', 'a4');
+                const pageWidth = doc.internal.pageSize.getWidth();
+                const pageHeight = doc.internal.pageSize.getHeight();
+
+                const target = document.querySelector('.container');
+                const canvas = await html2canvas(target, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+                const imgData = canvas.toDataURL('image/png');
+
+                const imgWidth = pageWidth - 40; // 20pt margins
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                let heightLeft = imgHeight;
+                let position = 20;
+
+                doc.addImage(imgData, 'PNG', 20, position, imgWidth, imgHeight);
+                heightLeft -= (pageHeight - 40);
+
+                while (heightLeft > 0) {
+                    doc.addPage();
+                    position = 20 - (imgHeight - heightLeft);
+                    doc.addImage(imgData, 'PNG', 20, position, imgWidth, imgHeight);
+                    heightLeft -= (pageHeight - 40);
+                }
+
+                doc.save(`Farm_Report_${new Date().toISOString().slice(0,10)}_${lang}.pdf`);
+                showNotification(`PDF report downloaded in ${getLanguageName(lang)}!`);
+            } catch (e) {
+                console.error('PDF generation failed', e);
+                showNotification('Failed to generate PDF');
+            }
+        }
+        
+        // Download Excel report
+        function downloadExcelReport(lang) {
+            showNotification(`Preparing Excel report in ${getLanguageName(lang)}...`);
+            const rows = [];
+            rows.push([document.getElementById('header-title').textContent.trim()]);
+            rows.push([document.getElementById('header-subtitle').textContent.trim()]);
+            rows.push([]);
+            // Card titles
+            document.querySelectorAll('.card-title-text').forEach(el => rows.push([el.textContent.trim()]));
+            rows.push([]);
+            // Stats labels and values
+            document.querySelectorAll('.stat-card').forEach(card => {
+                const label = card.querySelector('.stat-label');
+                const value = card.querySelector('.stat-value');
+                if (label && value) rows.push([label.textContent.trim(), value.textContent.trim()]);
+            });
+            rows.push([]);
+            rows.push([document.getElementById('summary-title').textContent.trim()]);
+            for (let i=1;i<=5;i++) {
+                const el = document.getElementById(`summary-item-${i}`);
+                if (el) rows.push([el.textContent.trim()]);
+            }
+            const ws = XLSX.utils.aoa_to_sheet(rows);
+                const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Farm Report');
+            XLSX.writeFile(wb, `Farm_Report_${new Date().toISOString().slice(0,10)}_${lang}.xlsx`);
+            showNotification(`Excel report downloaded in ${getLanguageName(lang)}!`);
+        }
+        
+        function getLanguageName(code) {
+            const languages = {
+                'en': 'English',
+                'hi': 'Hindi',
+                'te': 'Telugu'
+            };
+            return languages[code] || 'English';
+        }
+        
+        // Show notification
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+        
+        // Initialize
+        markTranslatable();
+        translatePage('en');
+        document.getElementById('downloadLang').addEventListener('change', async (e)=>{ await translatePage(e.target.value); });
+        updateCharts('day');
+    </script>
+</body>
+</html>

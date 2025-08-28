@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar Panel & Battery Monitoring</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        
+     * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f0f5f9;
+            color: #333; padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            background:  #2e7d32;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+        .main-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+         .card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+          .card-title i {
+            font-size: 20px;
+        }
+        
+        .time-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .time-btn {
+            padding: 8px 15px;
+            background: #e9ecef;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .time-btn.active {
+            background: #4a6491;
+            color: white;
+        }
+        
+        .battery-container {
+            display: flex;
+            flex-direction: column;align-items: center;
+            padding: 20px 0;
+        }
+        
+        .battery {
+            width: 120px;
+            height: 220px;
+            border: 8px solid #333;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .battery::before {
+            content: '';   
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 15px;
+            background: #333;
+            border-radius: 5px 5px 0 0;
+        }
+        
+        .battery-level {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+              width: 100%;
+            background: linear-gradient(to top, #4cd964, #34e89e);
+            transition: height 0.5s;
+        }
+        
+        .battery-info {
+            margin-top: 15px;
+            text-align: center;
+        }
+        
+        .battery-status {
+            font-weight: 600;
+             margin-top: 5px;
+        }
+        
+        .charging {
+            color: #4cd964;
+        }
+        
+        .discharging {
+            color: #ff3b30;
+        }
+        
+        .notification {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            background: #fff4e6;
+            border-left: 4px solid #ffa94d;
+        }
+        
+        .notification.alert {
+            background: #ffe6e6;
+            border-left: 4px solid #ff4d4d;
+        }
+           .notification-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .weather-status {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: #e6f7ff;
+            border-radius: 8px;
+            border-left: 4px solid #1890ff;
+        }
+         .weather-icon {
+            font-size: 40px;
+            color: #1890ff;
+        }
+        
+        .rainy {
+            background: #f0f8ff;
+            border-left: 4px solid #4682b4;
+        }
+           .rainy .weather-icon {
+            color: #4682b4;
+        }
+        
+        .recommendations {
+            margin-top: 15px;
+        }
+        
+        .recommendations ul {
+            padding-left: 20px;
+        }
+          .recommendations li {
+            margin-bottom: 8px;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+         .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .stat-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+         .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+        
+        .solar-value {
+            color: #ff9500;
+        }
+        
+        .consumption-value {
+            color: #007aff;
+        }
+         /* Language Selector */
+        .lang-selector {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 15px;
+            border-radius: 20px;
+        }
+        
+        .lang-selector select {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            color: white;
+            padding: 5px;
+            border-radius: 5px;
+         cursor: pointer;}
+          .lang-selector option {
+            color: #333;
+        }
+        
+        /* Translation loading indicator */
+        .translating {
+            position: relative;
+        }
+        
+        .translating::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 16px;
+            height: 16px;
+            margin: -8px 0 0 -8px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #2e7d32;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 900px) {
+            .dashboard {
+                grid-template-columns: 1fr;     }
+            
+            .lang-selector {
+                position: relative;
+                top: 0;
+                right: 0;
+                margin-bottom: 15px;
+                justify-content: flex-end;
+                background: rgba(0, 0, 0, 0.1);
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 data-translate="Solar Panel & Battery Monitoring System">Solar Panel & Battery Monitoring System</h1>
+            <p data-translate="Real-time monitoring of solar generation, battery status, and irrigation control">Real-time monitoring of solar generation, battery status, and irrigation control</p>
+            
+            <div class="lang-selector">
+                <span data-translate="Language">Language</span>
+                <select id="language">
+                    <option value="en">English</option>
+                    <option value="hi">हिन्दी</option>
+                    <option value="ta">தமிழ்</option>
+                    <option value="te">తెలుగు</option>
+                    <option value="kn">ಕನ್ನಡ</option>
+                    <option value="ml">മലയാളം</option>
+                    <option value="bn">বাংলা</option>
+                    <option value="mr">मराठी</option>
+                    <option value="gu">ગુજરાતી</option>
+                    <option value="pa">ਪੰਜਾਬੀ</option>
+                </select>
+                 <i class="fas fa-globe"></i>
+            </div>
+        </header>
+        
+        <div class="dashboard">
+            <div class="main-panel">
+                <div class="card">
+                    <div class="card-title">
+                        <i>📊</i> <span data-translate="Solar Generation vs Power Consumption">Solar Generation vs Power Consumption</span>
+                    </div>
+                    <div class="time-selector">
+                        <button class="time-btn active" data-period="day" data-translate="Day">Day</button>
+                        <button class="time-btn" data-period="week" data-translate="Week">Week</button>
+                        <button class="time-btn" data-period="month" data-translate="Month">Month</button>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="powerChart"></canvas>
+                    </div>
+                    <div class="stats">
+                        <div class="stat-card">
+                            <div data-translate="Solar Generated">Solar Generated</div>
+                            <div class="stat-value solar-value" id="solarValue">4.2 kWh</div>
+                            <div data-translate="Today">Today</div>
+                        </div>
+                        <div class="stat-card">
+                            <div data-translate="Power Consumed">Power Consumed</div>
+                            <div class="stat-value consumption-value" id="consumptionValue">3.8 kWh</div>
+                            <div data-translate="Today">Today</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">
+                        <i>⚡</i> <span data-translate="Battery Status">Battery Status</span>
+                    </div>
+                    <div class="battery-container">
+                        <div class="battery">
+                            <div class="battery-level" id="batteryLevel" style="height: 85%;"></div>
+                        </div>
+                        <div class="battery-info">
+                            <div id="batteryPercentage">85%</div>
+                            <div class="battery-status charging" id="batteryStatus" data-translate="Charging">Charging</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sidebar">
+                <div class="card">
+                    <div class="card-title">
+                        <i>🌦</i> <span data-translate="Weather Status & Recommendations">Weather Status & Recommendations</span>
+                    </div>
+                    <div style="margin-bottom: 10px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                        <label for="locationSelect" data-translate="Location">Location</label>:
+                        <select id="locationSelect" style="flex: 1; padding: 6px; min-width: 220px;">
+                            <option value="auto" data-translate="Use my location">Use my location</option>
+                        </select>
+                        <span id="locationNameDisplay" style="font-size: 12px; color: #555;">&nbsp;</span>
+                    </div>
+                    <div class="weather-status" id="weatherStatus">
+                        <div class="weather-icon">⏳</div>
+                        <div>
+                            <div data-translate="Loading weather data...">Loading weather data...</div>
+                            <div id="weather-details"></div>
+                        </div>
+                    </div>
+                    <div class="recommendations">
+                        <p><strong data-translate="Recommendations">Recommendations</strong>:</p>
+                        <ul id="recommendations-list">
+                            <li data-translate="Loading recommendations...">Loading recommendations...</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">
+                        <i>🔔</i> <span data-translate="Notifications">Notifications</span>
+                    </div>
+                    <div id="notifications">
+                        <div class="notification">
+                            <div class="notification-title" data-translate="System Normal">🟢 System Normal</div>
+                            <div data-translate="All systems operating within normal parameters">All systems operating within normal parameters</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">
+                        <i>🔄</i> <span data-translate="Irrigation Control">Irrigation Control</span>
+                    </div>
+                    <div class="control-panel">
+                        <p data-translate="Current irrigation status: Active">Current irrigation status: <strong data-translate="Active">Active</strong></p>
+                        <div style="margin-top: 15px;">
+                            <button id="toggleRain" class="time-btn" data-translate="Simulate Rainfall">Simulate Rainfall</button>
+                            <button id="toggleBattery" class="time-btn" style="margin-left: 10px;" data-translate="Simulate Low Battery">Simulate Low Battery</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Weather API configuration
+        const WEATHER_API_KEY = "df805452e2a0b8e016a98adf1f59820a"; // OpenWeatherMap API key
+        const WEATHER_API_URL = "https://api.openweathermap.org/data/2.5/weather";
+        const FORECAST_API_URL = "https://api.openweathermap.org/data/2.5/forecast"; // 5-day / 3-hour
+        const GEO_REVERSE_URL = "https://api.openweathermap.org/geo/1.0/reverse"; // reverse geocoding
+
+        const OPEN_METEO_URL = "https://api.open-meteo.com/v1/forecast"; // keyless fallback
+        const AGRO_API_URL = "https://api.agromonitoring.com/agro/1.0/weather/forecast"; // Agro Monitoring forecast
+        const AGRO_API_KEY = "75da2e3c7b479c5438015cf6c740e8d9";
+        
+        // Default coordinates (can be changed to user's location)
+        let latitude = 12.9716;  // Default to Bangalore
+        let longitude = 77.5946;
+        
+        // Translation API endpoint
+        const apiUrl = "https://api.mymemory.translated.net/get";
+        const translationCache = {};
+        
+        // Show/hide loading indicator for an element
+        function setElementLoading(element, isLoading) {
+            if (isLoading) {
+                element.classList.add('translating');
+            } else {
+                element.classList.remove('translating');
+            }
+        }
+        
+        // Show/hide loading indicator for all elements
+        function setAllLoading(isLoading) {
+            const elements = document.querySelectorAll("[data-translate]");
+            elements.forEach(el => {
+                setElementLoading(el, isLoading);
+            });
+        }
+
+        async function translateText(text, lang) {
+            if (lang === 'en') return text;
+            const cacheKey = `${lang}:${text}`;
+            if (translationCache[cacheKey]) {
+                return translationCache[cacheKey];
+            }
+            try {
+                const response = await fetch(`${apiUrl}?q=${encodeURIComponent(text)}&langpair=en|${lang}`);
+                const data = await response.json();
+                if (data && data.responseData && data.responseData.translatedText) {
+                    const translatedText = data.responseData.translatedText;
+                    translationCache[cacheKey] = translatedText;
+                    return translatedText;
+                } else {
+                    throw new Error('API translation failed');
+                }
+            } catch (error) {
+                console.warn('API translation failed:', error);
+                return text;
+            }
+        }
+
+        async function translatePage(lang) {
+            const elements = document.querySelectorAll("[data-translate]");
+            setAllLoading(true);
+            for (let el of elements) {
+                const originalText = el.getAttribute("data-translate");
+                if (lang === "en") {
+                    el.innerText = originalText;
+                } else {
+                    const translatedText = await translateText(originalText, lang);
+                    el.innerText = translatedText;
+                }
+                setElementLoading(el, false);
+            }
+            if (typeof updateWeatherDisplay === 'function') {
+                updateWeatherDisplay(currentWeatherData, lang);
+            }
+            if (typeof updateChartLanguage === 'function') {
+                updateChartLanguage(lang);
+            }
+            if (typeof translateLocationUI === 'function') {
+                translateLocationUI(lang);
+            }
+        }
+
+        document.getElementById("language").addEventListener("change", (e) => {
+            const lang = e.target.value;
+            translatePage(lang);
+            localStorage.setItem('preferredLanguage', lang);
+        });
+        
+        // Weather data storage
+        let currentWeatherData = null;
+        const presetLocations = [
+            { name: 'Bengaluru, IN', lat: 12.9716, lon: 77.5946 },
+            { name: 'Hyderabad, IN', lat: 17.3850, lon: 78.4867 },
+            { name: 'Mumbai, IN', lat: 19.0760, lon: 72.8777 },
+            { name: 'Delhi, IN', lat: 28.6139, lon: 77.2090 },
+            { name: 'Chennai, IN', lat: 13.0827, lon: 80.2707 },
+            { name: 'Kolkata, IN', lat: 22.5726, lon: 88.3639 },
+            { name: 'Pune, IN', lat: 18.5204, lon: 73.8567 },
+            { name: 'Ahmedabad, IN', lat: 23.0225, lon: 72.5714 }
+        ];
+
+        function populateLocationDropdown() {
+            const sel = document.getElementById('locationSelect');
+            const nameSpan = document.getElementById('locationNameDisplay');
+            if (!sel) return;
+            presetLocations.forEach((loc, idx) => {
+                const opt = document.createElement('option');
+                opt.value = `${loc.lat},${loc.lon}`;
+                opt.setAttribute('data-translate', loc.name);
+                opt.textContent = loc.name;
+                sel.appendChild(opt);
+            });
+            // Translate options based on current language
+            translateLocationUI(getCurrentLang());
+            sel.addEventListener('change', (e) => {
+                const val = e.target.value;
+                if (val === 'auto') {
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(
+                            (position) => {
+                                latitude = position.coords.latitude;
+                                longitude = position.coords.longitude;
+                                getWeatherFromAPI();
+                                resolveAndShowLocationName(latitude, longitude);
+                            },
+                            () => {
+                                getWeatherFromAPI();
+                            }
+                        );
+                    } else {
+                        getWeatherFromAPI();
+                    }
+                } else {
+                    const [latStr, lonStr] = val.split(',');
+                    latitude = parseFloat(latStr);
+                    longitude = parseFloat(lonStr);
+                    getWeatherFromAPI();
+                    const chosen = presetLocations.find(p => p.lat === latitude && p.lon === longitude);
+                    if (chosen && nameSpan) {
+                        const lang = getCurrentLang();
+                        if (lang === 'en') {
+                            nameSpan.innerText = chosen.name;
+                        } else {
+                            translateText(chosen.name, lang).then(t => { nameSpan.innerText = t || chosen.name; }).catch(() => { nameSpan.innerText = chosen.name; });
+                        }
+                    }
+                }
+            });
+        }
+
+        function translateLocationUI(lang) {
+            try {
+                const sel = document.getElementById('locationSelect');
+                if (sel) {
+                    Array.from(sel.options).forEach(async (opt) => {
+                        const key = opt.getAttribute('data-translate');
+                        if (!key) return;
+                        if (lang === 'en') {
+                            opt.text = key;
+                        } else {
+                            try {
+                                const t = await translateText(key, lang);
+                                opt.text = t || key;
+                            } catch (_) {
+                                opt.text = key;
+                            }
+                        }
+                    });
+                }
+                const nameSpan = document.getElementById('locationNameDisplay');
+                if (nameSpan) {
+                    const text = nameSpan.innerText.trim();
+                    // If it looks like coordinates, skip translation
+                    const coordsLike = /^-?\d+\.\d{1,3},\s*-?\d+\.\d{1,3}$/;
+                    if (!coordsLike.test(text) && text) {
+                        if (lang === 'en') {
+                            // We don't know the original; leave as is
+                        } else {
+                            translateText(text, lang).then(t => { nameSpan.innerText = t || text; }).catch(() => {});
+                        }
+                    }
+                }
+            } catch (_) {}
+        }
+
+        async function resolveAndShowLocationName(lat, lon) {
+            try {
+                const nameSpan = document.getElementById('locationNameDisplay');
+                if (!nameSpan) return;
+                if (isLikelyOpenWeatherKey(WEATHER_API_KEY)) {
+                    const url = `${GEO_REVERSE_URL}?lat=${lat}&lon=${lon}&limit=1&appid=${WEATHER_API_KEY}`;
+                    const res = await fetch(url);
+                    if (res.ok) {
+                        const arr = await res.json();
+                        if (Array.isArray(arr) && arr[0]) {
+                            const place = arr[0];
+                            const city = place.name || '';
+                            const state = place.state || '';
+                            const country = place.country || '';
+                            const label = [city, state].filter(Boolean).join(', ') || city || state || '';
+                            const baseText = label ? `${label}${country ? `, ${country}` : ''}` : `${lat.toFixed(3)}, ${lon.toFixed(3)}`;
+                            const lang = getCurrentLang();
+                            if (lang === 'en') {
+                                nameSpan.innerText = baseText;
+                            } else {
+                                try {
+                                    const t = await translateText(baseText, lang);
+                                    nameSpan.innerText = t || baseText;
+                                } catch (_) {
+                                    nameSpan.innerText = baseText;
+                                }
+                            }
+                            return;
+                        }
+                    }
+                }
+                // Fallback: plain coordinates
+                nameSpan.innerText = `${lat.toFixed(3)}, ${lon.toFixed(3)}`;
+            } catch (_) {
+                const nameSpan = document.getElementById('locationNameDisplay');
+                if (nameSpan) nameSpan.innerText = `${lat.toFixed(3)}, ${lon.toFixed(3)}`;
+            }
+        }
+        
+        async function fetchWeatherData() {
+            try {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            latitude = position.coords.latitude;
+                            longitude = position.coords.longitude;
+                            getWeatherFromAPI();
+                            resolveAndShowLocationName(latitude, longitude);
+                        },
+                        (error) => {
+                            console.warn("Geolocation not available, using default location");
+                            getWeatherFromAPI();
+                        }
+                    );
+                } else {
+                    getWeatherFromAPI();
+                }
+            } catch (error) {
+                console.error("Error fetching weather data:", error);
+                useMockWeatherData();
+            }
+        }
+        
+        function isLikelyOpenWeatherKey(value) {
+            if (typeof value !== 'string') return false;
+            if (!value || /^https?:\/\//i.test(value)) return false; // disallow URLs
+            if (/YOUR_OPENWEATHERMAP_API_KEY/i.test(value)) return false; // placeholder
+            // Typical OWM keys are 32-char hex, but allow alnum 24-64
+            return /^([a-f0-9]{32}|[a-z0-9]{24,64})$/i.test(value);
+        }
+
+        async function getWeatherFromAPI() {
+            const hasValidKey = isLikelyOpenWeatherKey(WEATHER_API_KEY);
+            try {
+                if (hasValidKey) {
+                    // Current weather (required on free tier)
+                    const currentRes = await fetch(`${WEATHER_API_URL}?lat=${latitude}&lon=${longitude}&units=metric&appid=${WEATHER_API_KEY}`);
+                    if (!currentRes.ok) throw new Error(`Weather API error: ${currentRes.status}`);
+                    const current = await currentRes.json();
+                    currentWeatherData = current;
+                    updateWeatherDisplay(current);
+
+                    // Fire-and-forget: OpenWeather 5-day forecast (optional)
+                    fetch(`${FORECAST_API_URL}?lat=${latitude}&lon=${longitude}&units=metric&appid=${WEATHER_API_KEY}`)
+                        .then(r => r.ok ? r.json() : null)
+                        .then(forecast => { window.latestForecast = forecast; })
+                        .catch(() => {});
+
+                    // Fire-and-forget: Agro Monitoring forecast (optional)
+                    fetch(`${AGRO_API_URL}?lat=${latitude}&lon=${longitude}&appid=${AGRO_API_KEY}&units=metric`)
+                        .then(r => r.ok ? r.json() : null)
+                        .then(agro => { window.agroForecast = agro; tryEnhanceRecommendationsWithForecast(agro); })
+                        .catch(() => {});
+
+                    setTimeout(fetchWeatherData, 30 * 60 * 1000);
+                    return;
+                }
+            } catch (error) {
+                console.warn("OpenWeather request failed, falling back to Open-Meteo:", error);
+            }
+            // Key missing or failure: use Open-Meteo keyless fallback
+            try {
+                await fetchFromOpenMeteo();
+                setTimeout(fetchWeatherData, 30 * 60 * 1000);
+            } catch (fallbackErr) {
+                console.error("Error fetching weather from API:", fallbackErr);
+                showWeatherError("Unable to fetch weather. Showing sample data.");
+                useMockWeatherData();
+            }
+        }
+
+        async function fetchFromOpenMeteo() {
+            const params = new URLSearchParams({
+                latitude: String(latitude),
+                longitude: String(longitude),
+                current: "temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code",
+                timezone: "auto"
+            });
+            const response = await fetch(`${OPEN_METEO_URL}?${params.toString()}`);
+            if (!response.ok) throw new Error('Open-Meteo request failed');
+            const data = await response.json();
+            const mapped = mapWmoToMainDesc(data?.current?.weather_code);
+            currentWeatherData = {
+                weather: [{ main: mapped.main, description: mapped.description }],
+                main: { temp: data?.current?.temperature_2m, humidity: data?.current?.relative_humidity_2m },
+                wind: { speed: data?.current?.wind_speed_10m },
+                clouds: { all: mapped.clouds },
+                rain: null
+            };
+            updateWeatherDisplay(currentWeatherData);
+        }
+
+        function mapWmoToMainDesc(code) {
+            const mapping = {
+                0: { main: 'Clear', description: 'clear sky', clouds: 0 },
+                1: { main: 'Clear', description: 'mostly clear', clouds: 10 },
+                2: { main: 'Clouds', description: 'partly cloudy', clouds: 40 },
+                3: { main: 'Clouds', description: 'overcast', clouds: 90 },
+                45: { main: 'Fog', description: 'fog', clouds: 80 },
+                48: { main: 'Fog', description: 'depositing rime fog', clouds: 80 },
+                51: { main: 'Drizzle', description: 'light drizzle', clouds: 70 },
+                53: { main: 'Drizzle', description: 'moderate drizzle', clouds: 80 },
+                55: { main: 'Drizzle', description: 'dense drizzle', clouds: 90 },
+                61: { main: 'Rain', description: 'slight rain', clouds: 90 },
+                63: { main: 'Rain', description: 'moderate rain', clouds: 95 },
+                65: { main: 'Rain', description: 'heavy rain', clouds: 100 },
+                71: { main: 'Snow', description: 'slight snow', clouds: 90 },
+                73: { main: 'Snow', description: 'moderate snow', clouds: 95 },
+                75: { main: 'Snow', description: 'heavy snow', clouds: 100 },
+                77: { main: 'Snow', description: 'snow grains', clouds: 100 },
+                80: { main: 'Rain', description: 'rain showers', clouds: 90 },
+                81: { main: 'Rain', description: 'heavy rain showers', clouds: 95 },
+                82: { main: 'Rain', description: 'violent rain showers', clouds: 100 },
+                85: { main: 'Snow', description: 'snow showers', clouds: 95 },
+                86: { main: 'Snow', description: 'heavy snow showers', clouds: 100 },
+                95: { main: 'Thunderstorm', description: 'thunderstorm', clouds: 100 },
+                96: { main: 'Thunderstorm', description: 'thunderstorm with slight hail', clouds: 100 },
+                99: { main: 'Thunderstorm', description: 'thunderstorm with heavy hail', clouds: 100 }
+            };
+            return mapping[code] || { main: 'Clear', description: 'clear sky', clouds: 0 };
+        }
+
+        function showWeatherError(msg) {
+            const detailsEl = document.getElementById('weather-details');
+            if (detailsEl) detailsEl.innerText = msg;
+        }
+        
+        function useMockWeatherData() {
+            currentWeatherData = {
+                weather: [{ main: "Clear", description: "clear sky", icon: "01d" }],
+                main: { temp: 28, humidity: 65 },
+                wind: { speed: 3.5 },
+                clouds: { all: 10 },
+                rain: null
+            };
+            updateWeatherDisplay(currentWeatherData);
+            setTimeout(fetchWeatherData, 5 * 60 * 1000);
+        }
+        
+        // Helpers and UI updaters re-introduced
+        function initializeApp() {
+            // Initialize chart and period buttons
+            initPowerChart();
+            setupPeriodButtons();
+        }
+
+        let powerChartInstance = null;
+
+        function setupPeriodButtons() {
+            const buttons = document.querySelectorAll('.time-btn');
+            buttons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    buttons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    const period = btn.getAttribute('data-period');
+                    updateChartPeriod(period);
+                });
+            });
+        }
+
+        function initPowerChart() {
+            const ctx = document.getElementById('powerChart');
+            if (!ctx) return;
+            const initial = buildChartData('day');
+            powerChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: initial.labels,
+                    datasets: [
+                        {
+                            label: 'Solar Generation (kWh)',
+                            data: initial.solar,
+                            borderColor: '#ff9500',
+                            backgroundColor: 'rgba(255,149,0,0.15)',
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: 'Power Consumption (kWh)',
+                            data: initial.consumption,
+                            borderColor: '#007aff',
+                            backgroundColor: 'rgba(0,122,255,0.15)',
+                            tension: 0.3,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: true } },
+                    scales: {
+                        x: { grid: { display: false } },
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+            updateStats(initial);
+            // Apply language to dataset labels
+            updateChartLanguage(getCurrentLang());
+        }
+
+        function updateChartPeriod(period) {
+            if (!powerChartInstance) return;
+            const data = buildChartData(period);
+            powerChartInstance.data.labels = data.labels;
+            powerChartInstance.data.datasets[0].data = data.solar;
+            powerChartInstance.data.datasets[1].data = data.consumption;
+            powerChartInstance.update();
+            updateStats(data);
+        }
+
+        function updateStats(data) {
+            const solarTotal = data.solar.reduce((a, b) => a + b, 0);
+            const consumptionTotal = data.consumption.reduce((a, b) => a + b, 0);
+            const solarEl = document.getElementById('solarValue');
+            const consEl = document.getElementById('consumptionValue');
+            if (solarEl) solarEl.innerText = `${solarTotal.toFixed(1)} kWh`;
+            if (consEl) consEl.innerText = `${consumptionTotal.toFixed(1)} kWh`;
+        }
+
+        function buildChartData(period) {
+            if (period === 'week') {
+                const labels = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+                const solar = [4.2, 4.8, 5.1, 4.6, 5.4, 6.0, 5.2];
+                const consumption = [3.8, 4.1, 4.3, 4.0, 4.6, 4.9, 4.2];
+                return { labels, solar, consumption };
+            }
+            if (period === 'month') {
+                const days = Array.from({ length: 30 }, (_, i) => `${i+1}`);
+                const solar = days.map((_, i) => 4 + Math.sin(i/3) + (i%5===0?1:0));
+                const consumption = days.map((_, i) => 3.5 + Math.cos(i/4) + (i%7===0?0.8:0));
+                return { labels: days, solar, consumption };
+            }
+            // default day (24 hours)
+            const labels = Array.from({ length: 24 }, (_, i) => `${i}:00`);
+            const solar = labels.map((_, i) => Math.max(0, Math.sin((i-6)/4) * 1.8));
+            const consumption = labels.map((_, i) => 0.9 + 0.3 * Math.cos((i)/3) + (i>18||i<6?0.4:0));
+            return { labels, solar, consumption };
+        }
+
+        function formatTempCelsius(value) {
+            if (value === undefined || value === null || isNaN(value)) return '—';
+            return `${Math.round(value)}°C`;
+        }
+
+        function getCurrentLang() {
+            const sel = document.getElementById('language');
+            return sel ? sel.value : 'en';
+        }
+
+        function getCurrentPeriod() {
+            const activeBtn = document.querySelector('.time-btn.active');
+            return activeBtn ? activeBtn.getAttribute('data-period') : 'day';
+        }
+
+        async function updateChartLanguage(lang) {
+            if (!powerChartInstance) return;
+            const solarLabel = 'Solar Generation (kWh)';
+            const consumptionLabel = 'Power Consumption (kWh)';
+            if (lang === 'en') {
+                powerChartInstance.data.datasets[0].label = solarLabel;
+                powerChartInstance.data.datasets[1].label = consumptionLabel;
+            } else {
+                const [tSolar, tCons] = await Promise.all([
+                    translateText(solarLabel, lang),
+                    translateText(consumptionLabel, lang)
+                ]);
+                powerChartInstance.data.datasets[0].label = tSolar || solarLabel;
+                powerChartInstance.data.datasets[1].label = tCons || consumptionLabel;
+            }
+            // Translate week day names if current period is week
+            if (getCurrentPeriod() === 'week') {
+                const baseDays = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+                if (lang === 'en') {
+                    powerChartInstance.data.labels = baseDays;
+                } else {
+                    const translated = await Promise.all(baseDays.map(d => translateText(d, lang)));
+                    powerChartInstance.data.labels = translated.map((t, i) => t || baseDays[i]);
+                }
+            }
+            powerChartInstance.update();
+        }
+
+        function buildRecommendations(ctx) {
+            const items = [];
+            if (ctx.main === 'Rain') {
+                items.push('Rain expected. Pause irrigation to conserve water.');
+            }
+            if (typeof ctx.temp === 'number' && ctx.temp > 32) {
+                items.push('High temperature. Schedule irrigation for early morning or late evening.');
+            }
+            if (typeof ctx.wind === 'number' && ctx.wind > 8) {
+                items.push('Windy conditions. Avoid sprinkler use to reduce drift.');
+            }
+            if (items.length === 0) {
+                items.push('Conditions normal. Maintain regular irrigation schedule.');
+            }
+            return items;
+        }
+
+        function tryEnhanceRecommendationsWithForecast(agro) {
+            try {
+                if (!agro || !Array.isArray(agro)) return;
+                // Look ahead a few entries (~ next several hours)
+                const soon = agro.slice(0, 6);
+                const rainySoon = soon.some(entry => {
+                    const w = entry && entry.weather && entry.weather[0];
+                    const main = w && w.main;
+                    return main === 'Rain' || main === 'Thunderstorm' || (w && /rain/i.test(w.description || ''));
+                });
+                if (!rainySoon) return;
+                const listEl = document.getElementById('recommendations-list');
+                if (!listEl) return;
+                const note = document.createElement('li');
+                const base = 'Rain likely in the next hours (forecast). Delay irrigation to save water.';
+                note.setAttribute('data-translate', base);
+                const currentLang = (document.getElementById('language') && document.getElementById('language').value) || 'en';
+                if (currentLang === 'en') {
+                    note.innerText = base;
+                } else {
+                    translateText(base, currentLang).then(t => { note.innerText = t || base; }).catch(() => { note.innerText = base; });
+                }
+                listEl.prepend(note);
+            } catch (_) {}
+        }
+
+        function updateWeatherDisplay(data, lang = 'en') {
+            const statusEl = document.getElementById('weatherStatus');
+            const detailsEl = document.getElementById('weather-details');
+            const listEl = document.getElementById('recommendations-list');
+
+            if (!data || !data.weather || !data.weather[0]) {
+                detailsEl.innerText = 'Unable to load weather.';
+                return;
+            }
+
+            // Hide the loading placeholder if present
+            const loadingEl = statusEl && statusEl.querySelector('[data-translate="Loading weather data..."]');
+            if (loadingEl) {
+                loadingEl.style.display = 'none';
+            }
+
+            const main = data.weather[0].main || '';
+            const description = data.weather[0].description || '';
+            const temp = data.main && typeof data.main.temp === 'number' ? data.main.temp : undefined;
+            const humidity = data.main && typeof data.main.humidity === 'number' ? data.main.humidity : undefined;
+            const wind = data.wind && typeof data.wind.speed === 'number' ? data.wind.speed : undefined;
+
+            // Icon
+            let emoji = '☀️';
+            if (main === 'Rain') emoji = '🌧️';
+            else if (main === 'Clouds') emoji = '☁️';
+            else if (main === 'Drizzle') emoji = '🌦️';
+            else if (main === 'Thunderstorm') emoji = '⛈️';
+            else if (main === 'Snow') emoji = '❄️';
+            statusEl.querySelector('.weather-icon').textContent = emoji;
+            statusEl.classList.toggle('rainy', main === 'Rain' || (description && description.toLowerCase().includes('rain')));
+
+            const humText = typeof humidity === 'number' ? `${Math.round(humidity)}%` : '—';
+            const windText = typeof wind === 'number' ? `${Math.round(wind)} m/s` : '—';
+            const detailsText = `${description} • ${formatTempCelsius(temp)}, Humidity ${humText}, Wind ${windText}`;
+            if (lang && lang !== 'en') {
+                translateText(detailsText, lang).then(t => { detailsEl.innerText = t || detailsText; }).catch(() => { detailsEl.innerText = detailsText; });
+            } else {
+                detailsEl.innerText = detailsText;
+            }
+
+            const recs = buildRecommendations({ main, temp, humidity, wind });
+            listEl.innerHTML = '';
+            const currentLang = (document.getElementById('language') && document.getElementById('language').value) || 'en';
+            recs.forEach(text => {
+                const li = document.createElement('li');
+                li.setAttribute('data-translate', text);
+                if (currentLang === 'en') {
+                    li.innerText = text;
+                } else {
+                    translateText(text, currentLang).then(t => { li.innerText = t || text; }).catch(() => { li.innerText = text; });
+                }
+                listEl.appendChild(li);
+            });
+        }
+
+        // ... (rest of your JavaScript code remains unchanged) ...
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedLang = localStorage.getItem('preferredLanguage');
+            if (savedLang && savedLang !== 'en') {
+                document.getElementById('language').value = savedLang;
+                translatePage(savedLang);
+            }
+            populateLocationDropdown();
+            initializeApp();
+            fetchWeatherData();
+            // Show default location name on first load
+            resolveAndShowLocationName(latitude, longitude);
+        });
+    </script>
+</body>
+</html>
