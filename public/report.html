@@ -23,6 +23,37 @@
             min-height: 100vh;
             padding: 20px;
         }
+        /* Dark mode */
+        body.dark { background: radial-gradient(1200px 600px at 80% -10%, rgba(76,175,80,0.12), transparent 60%), radial-gradient(900px 500px at -10% 110%, rgba(255,193,7,0.08), transparent 60%), #0e0f10; color: #e6e6e6; }
+        body.dark header { background: linear-gradient(135deg, rgba(31,41,55,0.7) 0%, rgba(17,24,39,0.7) 100%); color: #e0e0e0; box-shadow: 0 4px 22px rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.06); backdrop-filter: blur(8px); }
+        body.dark .card { background: #141416; border: 1px solid rgba(255,255,255,0.06); box-shadow: 0 10px 30px rgba(0,0,0,0.35); }
+        body.dark .card-title { color: #e0e0e0; border-bottom-color: #2a2a2a; }
+        body.dark .stat-card { background: #262626; }
+        body.dark .summary-content { background: #1f1f1f; }
+        body.dark .footer { color: #bdbdbd; }
+        .theme-toggle { padding: 8px 12px; border-radius: 6px; border: none; cursor: pointer; background: rgba(255,255,255,0.2); color: #fff; box-shadow: 0 6px 18px rgba(0,0,0,0.2); display:inline-flex; align-items:center; gap:8px; }
+        body.dark .theme-toggle { background: #e0e0e0; color: #111; }
+        /* Smooth transitions */
+        body, header, .card, .stat-card, .summary-content, .footer, .theme-toggle { transition: background-color 250ms ease, color 250ms ease, border-color 250ms ease, box-shadow 250ms ease, transform 250ms ease; }
+
+        /* Additional responsive rules */
+        @media (max-width: 992px) {
+            .container { padding: 0 16px; }
+            header { padding: 16px; }
+            h1 { font-size: 2.1rem; }
+            .subtitle { font-size: 1rem; }
+            .time-btn, .download-btn { padding: 10px 14px; }
+            .card { padding: 18px; }
+        }
+        @media (max-width: 576px) {
+            .report-controls { flex-direction: column; align-items: stretch; gap: 12px; }
+            .time-selector { flex-wrap: wrap; gap: 8px; justify-content: center; }
+            .download-options { justify-content: center; flex-wrap: wrap; }
+            .download-btn, .time-btn { width: 100%; justify-content: center; }
+            .card { padding: 16px; }
+            .summary-content { line-height: 1.55; }
+            .footer { padding: 16px; }
+        }
         
         .container {
             max-width: 1200px;
@@ -287,6 +318,9 @@
         <header>
             <h1><i class="fas fa-chart-line"></i> <span id="header-title">Farm Reports & Analytics</span></h1>
             <p class="subtitle" id="header-subtitle">Comprehensive reports for your farming operations</p>
+            <div style="position:absolute; top:20px; right:20px; display:flex; gap:10px; align-items:center;">
+                <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode"><span class="theme-icon" aria-hidden="true">🌙</span><span class="theme-label">Dark mode</span></button>
+            </div>
         </header>
         
         <div class="report-controls">
@@ -449,6 +483,9 @@
     </div>
 
     <script>
+        // Theme toggle (shared via localStorage)
+        function applyTheme(theme){ const enableDark = theme === 'dark'; document.body.classList.toggle('dark', enableDark); const b=document.getElementById('themeToggle'); if (b){ const i=b.querySelector('.theme-icon'); const l=b.querySelector('.theme-label'); if(i){ i.textContent = enableDark ? '☀️' : '🌙'; i.style.transform='scale(1.15)'; setTimeout(()=>{ i.style.transform='scale(1)'; },180);} if(l){ l.textContent = enableDark ? 'Light mode' : 'Dark mode'; } } }
+        function initTheme(){ const saved = localStorage.getItem('theme') || 'light'; applyTheme(saved); const b=document.getElementById('themeToggle'); if(b){ b.addEventListener('click', ()=>{ const next = document.body.classList.contains('dark') ? 'light' : 'dark'; localStorage.setItem('theme', next); applyTheme(next); }); } }
         // Translation API
         const translateApiUrl = "https://api.mymemory.translated.net/get";
         const translateCache = {};
@@ -784,6 +821,7 @@
         }
         
         // Initialize
+        initTheme();
         markTranslatable();
         translatePage('en');
         document.getElementById('downloadLang').addEventListener('change', async (e)=>{ await translatePage(e.target.value); });
