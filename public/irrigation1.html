@@ -21,6 +21,17 @@
             --temp-orange: #ff9800;
             --moisture-brown: #8d6e63;
         }
+        /* Dark mode */
+        body.dark { background-color: #121212; color: #e0e0e0; }
+        body.dark header { background-color: #1e1e1e; box-shadow: 0 2px 10px rgba(0,0,0,0.6); }
+        body.dark nav ul li a { color: #e0e0e0; }
+        body.dark nav ul li a:hover { color: #a5d6a7; }
+        body.dark .summary-card, body.dark .chart-card, body.dark .analysis-results, body.dark .recommendations { background: #1f1f1f; box-shadow: 0 5px 15px rgba(0,0,0,0.35); }
+        body.dark .result-card { background: #262626; }
+        body.dark .result-card h4, body.dark .recommendations h3, body.dark .analysis-results h3 { color: #e0e0e0; }
+        body.dark .footer { background: #0f0f0f; color: #e0e0e0; }
+        .theme-toggle { padding: 8px 12px; border-radius: 6px; border: 1px solid #ddd; cursor: pointer; background: white; display:inline-flex; align-items:center; gap:8px; }
+        body.dark .theme-toggle { background: #e0e0e0; color: #111; border-color: #333; }
         
         * {
             margin: 0;
@@ -186,6 +197,27 @@
             .charts-container {
                 grid-template-columns: 1fr;
             }
+        }
+        /* Enhanced responsive rules */
+        @media (max-width: 992px) {
+            .container { padding: 0 16px; }
+            .dashboard-header { margin: 20px 0; }
+            .summary-cards { gap: 16px; }
+            .summary-card { padding: 16px; }
+            .chart-card { padding: 16px; }
+            .analysis-results, .recommendations { padding: 16px; }
+            nav ul { flex-wrap: wrap; gap: 12px; }
+        }
+        @media (max-width: 768px) {
+            .header-content { gap: 10px; }
+            .time-selector { flex-wrap: wrap; }
+        }
+        @media (max-width: 576px) {
+            .container { padding: 0 14px; }
+            .time-btn { width: 100%; }
+            .dashboard-header > div:last-child { flex-direction: column; align-items: stretch !important; gap: 10px !important; }
+            #irrigationLocation { width: 100%; }
+            .chart-container { height: 260px; }
         }
         
         .chart-card {
@@ -405,6 +437,7 @@
                         <option value="pa">ਪੰਜਾਬੀ</option>
                     </select>
                 </div>
+                <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode"><span class="theme-icon" aria-hidden="true">🌙</span><span class="theme-label">Dark mode</span></button>
             </div>
         </div>
     </header>
@@ -596,6 +629,9 @@
     </footer>
 
     <script>
+        // Theme toggle (shared)
+        function applyTheme(theme){ const enableDark = theme === 'dark'; document.body.classList.toggle('dark', enableDark); const b=document.getElementById('themeToggle'); if (b){ const i=b.querySelector('.theme-icon'); const l=b.querySelector('.theme-label'); if(i){ i.textContent = enableDark ? '☀️' : '🌙'; i.style.transform='scale(1.15)'; setTimeout(()=>{ i.style.transform='scale(1)'; },180);} if(l){ l.textContent = enableDark ? 'Light mode' : 'Dark mode'; } } }
+        function initTheme(){ const saved = localStorage.getItem('theme') || 'light'; applyTheme(saved); const b=document.getElementById('themeToggle'); if (b){ b.addEventListener('click', ()=>{ const next = document.body.classList.contains('dark') ? 'light':'dark'; localStorage.setItem('theme', next); applyTheme(next); }); } }
         // Translation setup (similar to new.html)
         const translateApiUrl = "https://api.mymemory.translated.net/get";
         const translateCache = {};
@@ -723,6 +759,7 @@
             { name: 'Ahmedabad, IN', lat: 23.0225, lon: 72.5714 }
         ];
         document.addEventListener('DOMContentLoaded', () => {
+            initTheme();
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition((pos) => {
                     lat = pos.coords.latitude; lon = pos.coords.longitude; fetchIrrigationWeather(); updateIrrigationLocationName();
