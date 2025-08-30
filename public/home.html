@@ -3,186 +3,645 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SmartFarm Analytics | Intelligent Farming Solutions</title>
+  <title>SmartFarm Analytics | Material Design 3</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <style>
+    /* Material Design 3 Color System */
     :root {
-      --primary: #3498db;
-      --secondary: #2c3e50;
-      --accent: #2ecc71;
-      --warning: #e67e22;
-      --danger: #e74c3c;
-      --text-primary: #2c3e50;
-      --text-secondary: #7f8c8d;
-      --bg-primary: #f7f9fc;
-      --bg-secondary: #ffffff;
-      --card-shadow: rgba(0, 0, 0, 0.08);
-      --card-border: rgba(0, 0, 0, 0.05);
-      --gradient-start: #6a11cb;
-      --gradient-end: #2575fc;
-      --toggle-bg: #e9ecef;
-      --toggle-handle: #ffffff;
+      --md-sys-color-primary: #006A6B;
+      --md-sys-color-on-primary: #FFFFFF;
+      --md-sys-color-primary-container: #6FF6F7;
+      --md-sys-color-on-primary-container: #001F1F;
+      --md-sys-color-secondary: #4A6363;
+      --md-sys-color-on-secondary: #FFFFFF;
+      --md-sys-color-secondary-container: #CCE8E7;
+      --md-sys-color-on-secondary-container: #051F20;
+      --md-sys-color-tertiary: #4B607C;
+      --md-sys-color-on-tertiary: #FFFFFF;
+      --md-sys-color-tertiary-container: #D2E4FF;
+      --md-sys-color-on-tertiary-container: #041C35;
+      --md-sys-color-error: #BA1A1A;
+      --md-sys-color-on-error: #FFFFFF;
+      --md-sys-color-error-container: #FFDAD6;
+      --md-sys-color-on-error-container: #410002;
+      --md-sys-color-background: #FAFDFC;
+      --md-sys-color-on-background: #191C1C;
+      --md-sys-color-surface: #F8FAFA;
+      --md-sys-color-on-surface: #191C1C;
+      --md-sys-color-surface-variant: #DAE5E4;
+      --md-sys-color-on-surface-variant: #3F4948;
+      --md-sys-color-outline: #6F7978;
+      --md-sys-color-outline-variant: #BEC9C8;
+      --md-sys-color-shadow: #000000;
+      --md-sys-color-scrim: #000000;
+      --md-sys-color-inverse-surface: #2E3131;
+      --md-sys-color-inverse-on-surface: #EFF1F1;
+      --md-sys-color-inverse-primary: #4DDADB;
+      
+      /* Success/Warning colors */
+      --md-success: #4CAF50;
+      --md-warning: #FF9800;
+      --md-info: #2196F3;
+      
+      /* Material Design 3 Elevation */
+      --md-elevation-1: 0px 1px 3px rgba(0,0,0,0.12), 0px 1px 2px rgba(0,0,0,0.24);
+      --md-elevation-2: 0px 3px 6px rgba(0,0,0,0.16), 0px 3px 6px rgba(0,0,0,0.23);
+      --md-elevation-3: 0px 10px 20px rgba(0,0,0,0.19), 0px 6px 6px rgba(0,0,0,0.23);
+      --md-elevation-4: 0px 14px 28px rgba(0,0,0,0.25), 0px 10px 10px rgba(0,0,0,0.22);
     }
 
     [data-theme="dark"] {
-      --primary: #3498db;
-      --secondary: #ecf0f1;
-      --accent: #2ecc71;
-      --warning: #e67e22;
-      --danger: #e74c3c;
-      --text-primary: #ecf0f1;
-      --text-secondary: #bdc3c7;
-      --bg-primary: #1a1a2e;
-      --bg-secondary: #16213e;
-      --card-shadow: rgba(0, 0, 0, 0.25);
-      --card-border: rgba(255, 255, 255, 0.05);
-      --gradient-start: #1a1a2e;
-      --gradient-end: #16213e;
-      --toggle-bg: #3498db;
-      --toggle-handle: #ecf0f1;
+      --md-sys-color-primary: #4DDADB;
+      --md-sys-color-on-primary: #001F1F;
+      --md-sys-color-primary-container: #00504F;
+      --md-sys-color-on-primary-container: #6FF6F7;
+      --md-sys-color-secondary: #B0CCCA;
+      --md-sys-color-on-secondary: #1B3534;
+      --md-sys-color-secondary-container: #314B4A;
+      --md-sys-color-on-secondary-container: #CCE8E7;
+      --md-sys-color-tertiary: #B4C8E5;
+      --md-sys-color-on-tertiary: #1E344A;
+      --md-sys-color-tertiary-container: #344A63;
+      --md-sys-color-on-tertiary-container: #D2E4FF;
+      --md-sys-color-error: #FFB4AB;
+      --md-sys-color-on-error: #690005;
+      --md-sys-color-error-container: #93000A;
+      --md-sys-color-on-error-container: #FFDAD6;
+      --md-sys-color-background: #0F1414;
+      --md-sys-color-on-background: #DFE3E2;
+      --md-sys-color-surface: #0F1414;
+      --md-sys-color-on-surface: #DFE3E2;
+      --md-sys-color-surface-variant: #3F4948;
+      --md-sys-color-on-surface-variant: #BEC9C8;
+      --md-sys-color-outline: #889392;
+      --md-sys-color-outline-variant: #3F4948;
+      --md-sys-color-inverse-surface: #DFE3E2;
+      --md-sys-color-inverse-on-surface: #2E3131;
+      --md-sys-color-inverse-primary: #006A6B;
     }
 
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
     }
 
     body {
-      font-family: "Poppins", sans-serif;
-      background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
-      color: var(--text-primary);
+      font-family: 'Roboto', sans-serif;
+      background: var(--md-sys-color-background);
+      color: var(--md-sys-color-on-background);
+      line-height: 1.6;
       min-height: 100vh;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
     }
 
     .container {
-      width: 100%;
       max-width: 1200px;
       margin: 0 auto;
       padding: 20px;
     }
 
-    /* Header & Navigation */
-    header {
+    /* Header - Material Design 3 */
+    .header {
+      background: var(--md-sys-color-surface);
+      box-shadow: var(--md-elevation-1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      margin-bottom: 24px;
+    }
+
+    .header-content {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 20px 0;
-      margin-bottom: 30px;
+      padding: 16px 24px;
+      max-width: 1200px;
+      margin: 0 auto;
     }
 
     .logo {
       display: flex;
       align-items: center;
-      gap: 10px;
-      font-size: 24px;
-      font-weight: 700;
-      color: var(--text-primary);
-      text-decoration: none;
-    }
-
-    .logo i {
-      color: var(--accent);
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 25px;
-    }
-
-    .nav-links a {
-      color: var(--text-primary);
-      text-decoration: none;
+      gap: 12px;
+      font-size: 22px;
       font-weight: 500;
-      transition: all 0.3s ease;
+      color: var(--md-sys-color-on-surface);
+      text-decoration: none;
+    }
+
+    .logo .material-icons {
+      color: var(--md-sys-color-primary);
+      font-size: 28px;
+    }
+
+    /* Navigation Tabs - Material Design 3 */
+    .nav-tabs {
+      display: flex;
+      gap: 8px;
+      background: var(--md-sys-color-surface-variant);
+      border-radius: 100px;
+      padding: 4px;
+    }
+
+    .nav-tab {
+      padding: 10px 24px;
+      border: none;
+      border-radius: 100px;
+      background: transparent;
+      color: var(--md-sys-color-on-surface-variant);
+      font-family: 'Roboto', sans-serif;
+      font-weight: 500;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-tab:hover {
+      background: rgba(var(--md-sys-color-on-surface), 0.08);
+    }
+
+    .nav-tab.active {
+      background: var(--md-sys-color-secondary-container);
+      color: var(--md-sys-color-on-secondary-container);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    /* User Menu */
+    .user-menu {
+      display: flex;
+      align-items: center;
+      gap: 12px;
       padding: 8px 16px;
-      border-radius: 8px;
+      border-radius: 24px;
+      background: var(--md-sys-color-primary-container);
+      color: var(--md-sys-color-on-primary-container);
     }
 
-    .nav-links a:hover, .nav-links a.active {
-      background: rgba(255, 255, 255, 0.1);
-      color: var(--accent);
-    }
-
-    .header-controls {
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--md-sys-color-primary);
+      color: var(--md-sys-color-on-primary);
       display: flex;
       align-items: center;
-      gap: 20px;
+      justify-content: center;
+      font-weight: 500;
+      font-size: 14px;
     }
 
-    .theme-switch-wrapper {
-      display: flex;
-      align-items: center;
-    }
-
-    .theme-switch {
-      display: inline-block;
+    /* Theme Toggle - Material Design 3 */
+    .theme-toggle {
       position: relative;
-      width: 60px;
-      height: 30px;
+      width: 52px;
+      height: 32px;
+      background: var(--md-sys-color-surface-variant);
+      border-radius: 16px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
     }
 
-    .theme-switch input {
+    .theme-toggle input {
       opacity: 0;
       width: 0;
       height: 0;
     }
 
-    .slider {
+    .theme-toggle .slider {
       position: absolute;
-      cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: var(--toggle-bg);
-      transition: .4s;
-      border-radius: 34px;
-    }
-
-    .slider:before {
-      position: absolute;
-      content: "";
-      height: 22px;
-      width: 22px;
-      left: 4px;
-      bottom: 4px;
-      background-color: var(--toggle-handle);
-      transition: .4s;
+      top: 2px;
+      left: 2px;
+      width: 28px;
+      height: 28px;
+      background: var(--md-sys-color-outline);
       border-radius: 50%;
+      transition: transform 0.2s ease, background-color 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    input:checked + .slider {
-      background-color: var(--toggle-bg);
+    .theme-toggle input:checked + .slider {
+      transform: translateX(20px);
+      background: var(--md-sys-color-primary);
     }
 
-    input:checked + .slider:before {
-      transform: translateX(30px);
+    .theme-toggle .material-icons {
+      font-size: 16px;
+      color: var(--md-sys-color-surface);
     }
 
-    .slider i {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
+    /* Cards - Material Design 3 */
+    .card {
+      background: var(--md-sys-color-surface);
+      border-radius: 12px;
+      box-shadow: var(--md-elevation-1);
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+
+    .card-elevated {
+      box-shadow: var(--md-elevation-2);
+    }
+
+    .card-header {
+      padding: 20px 24px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-title {
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--md-sys-color-on-surface);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .card-content {
+      padding: 24px;
+    }
+
+    /* Buttons - Material Design 3 */
+    .btn {
+      border: none;
+      border-radius: 20px;
+      padding: 10px 24px;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 500;
       font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
     }
 
-    .slider .sun {
-      left: 8px;
-      color: #f39c12;
+    .btn:hover {
+      box-shadow: var(--md-elevation-1);
     }
 
-    .slider .moon {
-      right: 8px;
-      color: #f1c40f;
+    .btn-filled {
+      background: var(--md-sys-color-primary);
+      color: var(--md-sys-color-on-primary);
     }
+
+    .btn-filled:hover {
+      background: color-mix(in srgb, var(--md-sys-color-primary) 85%, black);
+    }
+
+    .btn-tonal {
+      background: var(--md-sys-color-secondary-container);
+      color: var(--md-sys-color-on-secondary-container);
+    }
+
+    .btn-outlined {
+      background: transparent;
+      border: 1px solid var(--md-sys-color-outline);
+      color: var(--md-sys-color-primary);
+    }
+
+    .btn-text {
+      background: transparent;
+      color: var(--md-sys-color-primary);
+    }
+
+    .btn-success {
+      background: var(--md-success);
+      color: white;
+    }
+
+    .btn-error {
+      background: var(--md-sys-color-error);
+      color: var(--md-sys-color-on-error);
+    }
+
+    /* FAB - Floating Action Button */
+    .fab {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      background: var(--md-sys-color-primary-container);
+      color: var(--md-sys-color-on-primary-container);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--md-elevation-3);
+      transition: all 0.2s ease;
+    }
+
+    .fab:hover {
+      box-shadow: var(--md-elevation-4);
+    }
+
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      padding: 48px 0;
+      background: var(--md-sys-color-primary-container);
+      color: var(--md-sys-color-on-primary-container);
+      border-radius: 28px;
+      margin-bottom: 32px;
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      font-weight: 400;
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+
+    .hero p {
+      font-size: 1.25rem;
+      max-width: 600px;
+      margin: 0 auto 32px;
+      opacity: 0.8;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: var(--md-sys-color-surface);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: var(--md-elevation-1);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .stat-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--md-sys-color-on-surface-variant);
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 400;
+      color: var(--md-sys-color-on-surface);
+    }
+
+    .stat-change {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 14px;
+      color: var(--md-sys-color-on-surface-variant);
+    }
+
+    .stat-change.positive {
+      color: var(--md-success);
+    }
+
+    .stat-change.negative {
+      color: var(--md-sys-color-error);
+    }
+
+    /* Chart Container */
+    .chart-container {
+      background: var(--md-sys-color-surface);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: var(--md-elevation-1);
+      margin-bottom: 24px;
+    }
+
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .chart-title {
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: var(--md-sys-color-on-surface);
+    }
+
+    /* Features Grid */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin: 32px 0;
+    }
+
+    .feature-card {
+      background: var(--md-sys-color-surface);
+      border-radius: 16px;
+      padding: 32px;
+      text-align: center;
+      box-shadow: var(--md-elevation-1);
+      transition: box-shadow 0.2s ease;
+    }
+
+    .feature-card:hover {
+      box-shadow: var(--md-elevation-2);
+    }
+
+    .feature-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: var(--md-sys-color-secondary-container);
+      color: var(--md-sys-color-on-secondary-container);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 32px;
+    }
+
+    .feature-title {
+      font-size: 1.5rem;
+      font-weight: 400;
+      margin-bottom: 12px;
+      color: var(--md-sys-color-on-surface);
+    }
+
+    .feature-description {
+      color: var(--md-sys-color-on-surface-variant);
+      line-height: 1.6;
+    }
+
+    /* Section visibility */
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        gap: 16px;
+        padding: 16px;
+      }
+
+      .nav-tabs {
+        order: 2;
+        width: 100%;
+        justify-content: center;
+      }
+
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .fab {
+        bottom: 16px;
+        right: 16px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 16px;
+      }
+
+      .card-content {
+        padding: 16px;
+      }
+
+      .nav-tabs {
+        padding: 2px;
+      }
+
+      .nav-tab {
+        padding: 8px 16px;
+        font-size: 12px;
+      }
+
+      .nav-tab .material-icons {
+        font-size: 18px;
+      }
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-in {
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    /* Loading states */
+    .loading {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    .loading::after {
+      content: '';
+      width: 16px;
+      height: 16px;
+      border: 2px solid transparent;
+      border-top: 2px solid currentColor;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-left: 8px;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Override status */
+    .override-status {
+      background: var(--md-sys-color-tertiary-container);
+      color: var(--md-sys-color-on-tertiary-container);
+      padding: 16px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: var(--md-elevation-1);
+    }
+
+    .override-timer {
+      font-weight: 500;
+      font-family: 'Roboto Mono', monospace;
+    }
+
+    /* Status messages */
+    .status-message {
+      padding: 16px;
+      border-radius: 12px;
+      margin: 16px 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 500;
+    }
+
+    .status-message.success {
+      background: var(--md-sys-color-tertiary-container);
+      color: var(--md-sys-color-on-tertiary-container);
+    }
+
+    .status-message.error {
+      background: var(--md-sys-color-error-container);
+      color: var(--md-sys-color-on-error-container);
+    }
+
+    .status-message.info {
+      background: var(--md-sys-color-secondary-container);
+      color: var(--md-sys-color-on-secondary-container);
+    }
+  </style>
+</head>
 
     /* Hero Section */
     .hero {
@@ -557,19 +1016,18 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    background: var(--md-sys-color-background);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 9999;
-    color: white;
-    font-size: 1.2em;
+    color: var(--md-sys-color-on-background);
   ">
     <div style="text-align: center;">
       <div style="
-        border: 3px solid rgba(255,255,255,0.3);
+        border: 3px solid var(--md-sys-color-outline-variant);
         border-radius: 50%;
-        border-top: 3px solid white;
+        border-top: 3px solid var(--md-sys-color-primary);
         width: 40px;
         height: 40px;
         animation: spin 1s linear infinite;
@@ -628,453 +1086,453 @@
   </script>
 
   <div id="mainContent" style="display: none;">
-  <div class="container">
-    <header>
-      <a href="#" class="logo" onclick="showSection('home')">
-        <i class="fas fa-seedling"></i>
-        <span>SmartFarm Analytics</span>
-      </a>
-      <div class="nav-links">
-        <a href="#" class="active" onclick="showSection('home')">Home</a>
-        <a href="#" onclick="showSection('irrigation')">Irrigation</a>
-        <a href="#" onclick="showSection('solar')">Solar</a>
-        <a href="#" onclick="showSection('ai')">AI Suggestions</a>
-      </div>
-      <div class="header-controls">
-        <div class="user-info" style="
-          display: flex;
-          align-items: center;
-          gap: 15px;
-          margin-right: 20px;
-        ">
-          <div style="
-            width: 35px;
-            height: 35px;
-            background: var(--accent);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 600;
-            font-size: 0.9em;
-          " id="userAvatar">U</div>
-          <span id="userEmail" style="
-            color: var(--text-primary);
-            font-size: 0.9em;
-            max-width: 150px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-          ">user@example.com</span>
-          <button onclick="logout()" style="
-            background: var(--danger);
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.85em;
-            font-weight: 500;
-            transition: background 0.3s ease;
-          " onmouseover="this.style.background='#c0392b'" onmouseout="this.style.background='var(--danger)'">
-            <i class="fas fa-sign-out-alt" style="margin-right: 5px;"></i>Logout
+    <!-- Header -->
+    <header class="header">
+      <div class="header-content">
+        <a href="#" class="logo" onclick="showSection('home')">
+          <span class="material-icons">eco</span>
+          <span>SmartFarm Analytics</span>
+        </a>
+        
+        <nav class="nav-tabs">
+          <button class="nav-tab active" onclick="showSection('home')">
+            <span class="material-icons">home</span>
+            <span>Home</span>
           </button>
-        </div>
-        <div class="theme-switch-wrapper">
-          <label class="theme-switch" for="checkbox">
-            <input type="checkbox" id="checkbox" />
+          <button class="nav-tab" onclick="showSection('irrigation')">
+            <span class="material-icons">water_drop</span>
+            <span>Irrigation</span>
+          </button>
+          <button class="nav-tab" onclick="showSection('solar')">
+            <span class="material-icons">solar_power</span>
+            <span>Solar</span>
+          </button>
+          <button class="nav-tab" onclick="showSection('ai')">
+            <span class="material-icons">psychology</span>
+            <span>AI Insights</span>
+          </button>
+        </nav>
+
+        <div class="header-actions">
+          <div class="user-menu">
+            <div class="user-avatar" id="userAvatar">U</div>
+            <span id="userEmail" style="max-width: 120px; overflow: hidden; text-overflow: ellipsis;">user@example.com</span>
+            <button class="btn btn-text" onclick="logout()" style="color: var(--md-sys-color-error); font-size: 12px; padding: 4px 8px;">
+              <span class="material-icons" style="font-size: 16px;">logout</span>
+            </button>
+          </div>
+          
+          <label class="theme-toggle">
+            <input type="checkbox" id="themeToggle">
             <div class="slider">
-              <i class="fas fa-sun sun"></i>
-              <i class="fas fa-moon moon"></i>
+              <span class="material-icons">light_mode</span>
             </div>
           </label>
         </div>
       </div>
     </header>
 
-    <!-- Home Section -->
-    <section id="home" class="dashboard-section active">
-      <div class="hero">
-        <h1>Transform Your Farming with Data-Driven Insights</h1>
-        <p>SmartFarm Analytics helps you optimize irrigation, monitor solar energy, and get AI-powered suggestions to maximize your farm's productivity and sustainability.</p>
-        <div class="hero-buttons">
-          <button class="btn btn-primary" onclick="showSection('irrigation')">
-            <i class="fas fa-tint"></i> View Irrigation Data
-          </button>
-          <button class="btn btn-secondary" onclick="showSection('solar')">
-            <i class="fas fa-solar-panel"></i> Check Solar Analytics
-          </button>
-        </div>
-      </div>
-
-      <div class="features">
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="fas fa-tint"></i>
-          </div>
-          <h3>Smart Irrigation</h3>
-          <p>Monitor and optimize water usage with real-time data and AI-powered suggestions for efficient irrigation.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="fas fa-solar-panel"></i>
-          </div>
-          <h3>Solar Monitoring</h3>
-          <p>Track energy production, consumption, and battery levels to maximize your solar investment.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="fas fa-robot"></i>
-          </div>
-          <h3>AI Suggestions</h3>
-          <p>Get intelligent recommendations based on weather data, soil conditions, and historical patterns.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Irrigation Dashboard Section -->
-    <section id="irrigation" class="dashboard-section">
-      <div class="dashboard-title">
-        <h1>💧 Irrigation Data Analysis</h1>
-        <p>Monitor and analyze water usage patterns to optimize irrigation efficiency</p>
-      </div>
-      
-      <div class="controls">
-        <div class="timeframe-selector">
-          <button class="timeframe-btn active" data-value="day">Daily</button>
-          <button class="timeframe-btn" data-value="week">Weekly</button>
-          <button class="timeframe-btn" data-value="month">Monthly</button>
-          <button class="timeframe-btn" data-value="hour">Hourly</button>
-        </div>
-        <div class="date-range">
-          <span>Last 30 Days</span>
-        </div>
-      </div>
-      
-      <div class="stats-cards">
-        <div class="stat-card">
-          <i class="fas fa-tint"></i>
-          <h3>WATER USAGE</h3>
-          <div class="value">1,240 L</div>
-          <div class="change positive"><i class="fas fa-arrow-up"></i> 12% from last week</div>
-        </div>
-        
-        <div class="stat-card">
-          <i class="fas fa-leaf"></i>
-          <h3>IRRIGATION AREA</h3>
-          <div class="value">2.5 ha</div>
-          <div class="change"><i class="fas fa-minus"></i> No change</div>
-        </div>
-        
-        <div class="stat-card">
-          <i class="fas fa-bolt"></i>
-          <h3>EFFICIENCY RATING</h3>
-          <div class="value">87%</div>
-          <div class="change positive"><i class="fas fa-arrow-up"></i> 5% improvement</div>
-        </div>
-        
-        <div class="stat-card">
-          <i class="fas fa-cloud-rain"></i>
-          <h3>RAINFALL SAVINGS</h3>
-          <div class="value">320 L</div>
-          <div class="change positive"><i class="fas fa-arrow-up"></i> 8% more than expected</div>
-        </div>
-      </div>
-      
-      <div class="chart-container">
-        <div class="chart-header">
-          <h2>Water Usage Overview</h2>
-          <div class="chart-actions">
-            <button>Export</button>
-            <button>Save</button>
-          </div>
-        </div>
-        <canvas id="irrigationChart"></canvas>
-      </div>
-      
-      <div class="additional-data">
-        <div class="data-card">
-          <h3>Top Irrigation Zones</h3>
-          <div class="data-item">
-            <div>Vegetable Garden</div>
-            <div>420 L</div>
-          </div>
-          <div class="data-item">
-            <div>Lawn</div>
-            <div>380 L</div>
-          </div>
-          <div class="data-item">
-            <div>Orchard</div>
-            <div>280 L</div>
-          </div>
-          <div class="data-item">
-            <div>Greenhouse</div>
-            <div>160 L</div>
-          </div>
-        </div>
-        
-        <div class="data-card">
-          <h3>Water Savings Tips</h3>
-          <div class="data-item">
-            <div><i class="fas fa-check-circle" style="color: #2ecc71;"></i> Water early morning</div>
-          </div>
-          <div class="data-item">
-            <div><i class="fas fa-check-circle" style="color: #2ecc71;"></i> Check for leaks</div>
-          </div>
-          <div class="data-item">
-            <div><i class="fas fa-check-circle" style="color: #2ecc71;"></i> Adjust sprinkler heads</div>
-          </div>
-          <div class="data-item">
-            <div><i class="fas fa-check-circle" style="color: #2ecc71;"></i> Use mulch to retain moisture</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Solar Dashboard Section -->
-    <section id="solar" class="dashboard-section">
-      <div class="dashboard-title">
-        <h1>☀️ Solar Panel Monitoring</h1>
-        <p>Track energy production, consumption, and efficiency in real-time</p>
-      </div>
-      
-      <div class="controls">
-        <div class="timeframe-selector">
-          <button class="timeframe-btn active" data-value="hour">Hourly</button>
-          <button class="timeframe-btn" data-value="day">Daily</button>
-          <button class="timeframe-btn" data-value="week">Weekly</button>
-          <button class="timeframe-btn" data-value="month">Monthly</button>
-        </div>
-        <div class="date-range">
-          <span id="dateRange">Last 24 Hours</span>
-        </div>
-      </div>
-      
-      <div class="stats-cards">
-        <div class="stat-card">
-          <i class="fas fa-solar-panel"></i>
-          <h3>SOLAR GENERATION</h3>
-          <div class="value" id="solarPower">3.8 kW</div>
-          <div class="change positive"><i class="fas fa-arrow-up"></i> 12% from yesterday</div>
-        </div>
-        
-        <div class="stat-card">
-          <i class="fas fa-battery-three-quarters"></i>
-          <h3>BATTERY LEVEL</h3>
-          <div class="value" id="batteryLevel">60%</div>
-          <div class="change" id="batteryStatus">5 hrs backup remaining</div>
-        </div>
-        
-        <div class="stat-card">
-          <i class="fas fa-bolt"></i>
-          <h3>ENERGY USAGE</h3>
-          <div class="value">2.4 kW</div>
-          <div class="change negative"><i class="fas fa-arrow-up"></i> 8% from yesterday</div>
-        </div>
-        
-        <div class="stat-card">
-          <i class="fas fa-money-bill-wave"></i>
-          <h3>COST SAVINGS</h3>
-          <div class="value">$12.50</div>
-          <div class="change positive"><i class="fas fa-arrow-up"></i> Today's savings</div>
-        </div>
-      </div>
-      
-      <div class="chart-container">
-        <div class="chart-header">
-          <h2>Energy Production & Consumption</h2>
-          <div class="chart-actions">
-            <button>Export</button>
-            <button>Save</button>
-          </div>
-        </div>
-        <canvas id="energyChart"></canvas>
-      </div>
-      
-      <div class="additional-data">
-        <div class="data-card">
-          <h3>System Performance</h3>
-          <div class="data-item">
-            <div>Efficiency Rating</div>
-            <div>87%</div>
-          </div>
-          <div class="data-item">
-            <div>Peak Output Today</div>
-            <div>4.2 kW</div>
-          </div>
-          <div class="data-item">
-            <div>Carbon Offset</div>
-            <div>42 kg</div>
-          </div>
-          <div class="data-item">
-            <div>System Capacity</div>
-            <div>5.0 kW</div>
-          </div>
-        </div>
-        
-        <div class="data-card">
-          <h3>Efficiency Suggestions</h3>
-          <div class="data-item">
-            <div><i class="fas fa-check-circle" style="color: #2ecc71;"></i> Clean panels for 5% boost</div>
-          </div>
-          <div class="data-item">
-            <div><i class="fas fa-check-circle" style="color: #2ecc71;"></i> Shift usage to peak hours</div>
-          </div>
-          <div class="data-item">
-            <div><i class="fas fa-check-circle" style="color: #2ecc71;"></i> Consider battery expansion</div>
-          </div>
-          <div class="data-item">
-            <div><i class="fas fa-check-circle" style="color: #2ecc71;"></i> Optimal panel angle achieved</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- AI Suggestions Section -->
-    <section id="ai" class="dashboard-section">
-      <div class="dashboard-title">
-        <h1>🌱 Smart AI Farm Suggestions</h1>
-        <p>AI-powered insights to optimize your farm's productivity and efficiency</p>
-      </div>
-      
-      <div class="dashboard">
-        <!-- Energy & Battery -->
-        <div class="stat-card">
-          <h2><i class="fas fa-solar-panel"></i> Energy Management</h2>
-          <div class="stat-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-            <div class="stat-item">
-              <span class="stat-label">Energy Generated</span>
-              <span class="value">40 kWh</span>
-            </div>
-            <div class="stat-item">
-              <span class="stat-label">Battery Level</span>
-              <span class="value">75%</span>
-            </div>
-          </div>
-          <div class="progress-bar">
-            <div class="progress" style="width: 75%"></div>
-          </div>
-          <div class="stat-label">5 hrs backup remaining</div>
-        </div>
-
-        <!-- Water & Fertilizer -->
-        <div class="stat-card">
-          <h2><i class="fas fa-tint"></i> Irrigation</h2>
-          <div class="stat-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-            <div class="stat-item">
-              <span class="stat-label">Water Used</span>
-              <span class="value">120 L</span>
-            </div>
-            <div class="stat-item">
-              <span class="stat-label">Fertilizer Mix</span>
-              <span class="value">60%</span>
-            </div>
-          </div>
-          <div class="progress-bar">
-            <div class="progress" style="width: 60%"></div>
-          </div>
-          <div class="stat-label">Optimal mix for current crops</div>
-        </div>
-
-        <!-- Weather & Conditions -->
-        <div class="stat-card">
-          <h2><i class="fas fa-cloud-sun"></i> Environment</h2>
-          <div class="stat-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-            <div class="stat-item">
-              <span class="stat-label">Temperature</span>
-              <span class="value">26°C</span>
-            </div>
-            <div class="stat-item">
-              <span class="stat-label">Humidity</span>
-              <span class="value">65%</span>
-            </div>
-          </div>
-          <div class="stat-item">
-            <span class="stat-label">Conditions</span>
-            <span class="value">Partly Cloudy</span>
-          </div>
-          <div class="stat-label">Rain expected in 24h</div>
-        </div>
-
-        <!-- AI Suggestions Card -->
-        <div class="stat-card" style="grid-column: 1 / -1;">
-          <div class="suggestion-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h2><i class="fas fa-robot"></i> AI Recommendations</h2>
-            <button class="btn btn-primary" onclick="generateSuggestions()">
-              <i class="fas fa-sync-alt"></i> Generate New Suggestions
+    <div class="container">
+      <!-- Home Section -->
+      <section id="home" class="section active">
+        <div class="hero animate-in">
+          <h1>Transform Your Farming with Smart Analytics</h1>
+          <p>Monitor irrigation, track solar energy, and get AI-powered insights to maximize productivity and sustainability.</p>
+          <div class="hero-actions">
+            <button class="btn btn-filled" onclick="showSection('irrigation')">
+              <span class="material-icons">water_drop</span>
+              View Irrigation Data
+            </button>
+            <button class="btn btn-tonal" onclick="showSection('solar')">
+              <span class="material-icons">solar_power</span>
+              Solar Analytics
             </button>
           </div>
+        </div>
+
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <span class="material-icons">water_drop</span>
+            </div>
+            <h3 class="feature-title">Smart Irrigation</h3>
+            <p class="feature-description">Monitor and optimize water usage with real-time data and AI-powered suggestions for efficient irrigation management.</p>
+          </div>
           
-          <div class="suggestion-content" style="background: rgba(46, 204, 113, 0.1); border-radius: 12px; padding: 20px; border-left: 4px solid var(--accent); margin-bottom: 20px;">
-            <div class="suggestion-title" id="suggestionTitle" style="font-weight: 600; margin-bottom: 10px; color: var(--accent);">Optimal Conditions</div>
-            <div class="suggestion-text" id="suggestionText" style="line-height: 1.6;">
-              Current farming parameters are within optimal ranges. Continue with scheduled irrigation and fertilization.
+          <div class="feature-card">
+            <div class="feature-icon">
+              <span class="material-icons">solar_power</span>
+            </div>
+            <h3 class="feature-title">Solar Monitoring</h3>
+            <p class="feature-description">Track energy production, consumption, and battery levels to maximize your solar investment and reduce costs.</p>
+          </div>
+          
+          <div class="feature-card">
+            <div class="feature-icon">
+              <span class="material-icons">psychology</span>
+            </div>
+            <h3 class="feature-title">AI Insights</h3>
+            <p class="feature-description">Get intelligent recommendations based on weather patterns, soil conditions, and historical farming data.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Irrigation Section -->
+      <section id="irrigation" class="section">
+        <div class="card-header">
+          <h1 class="card-title">
+            <span class="material-icons">water_drop</span>
+            Irrigation Analytics
+          </h1>
+          <p style="color: var(--md-sys-color-on-surface-variant); margin-top: 8px;">Monitor and optimize water usage patterns</p>
+        </div>
+
+        <!-- Override Status -->
+        <div id="overrideStatus" class="override-status" style="display: none;">
+          <span class="material-icons">schedule</span>
+          <span>Manual override active - <span class="override-timer" id="overrideTimer">5:00</span> remaining</span>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="material-icons">water_drop</span>
+              <span>Water Usage</span>
+            </div>
+            <div class="stat-value">1,240 L</div>
+            <div class="stat-change positive">
+              <span class="material-icons">trending_up</span>
+              12% from last week
+            </div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="material-icons">grass</span>
+              <span>Irrigation Area</span>
+            </div>
+            <div class="stat-value">2.5 ha</div>
+            <div class="stat-change">
+              <span class="material-icons">trending_flat</span>
+              No change
+            </div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="material-icons">efficiency</span>
+              <span>Efficiency Rating</span>
+            </div>
+            <div class="stat-value">87%</div>
+            <div class="stat-change positive">
+              <span class="material-icons">trending_up</span>
+              5% improvement
+            </div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="material-icons">cloud_download</span>
+              <span>Rainfall Savings</span>
+            </div>
+            <div class="stat-value">320 L</div>
+            <div class="stat-change positive">
+              <span class="material-icons">trending_up</span>
+              8% more than expected
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-container card-elevated">
+          <div class="chart-header">
+            <h2 class="chart-title">Water Usage Overview</h2>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn btn-outlined">
+                <span class="material-icons">file_download</span>
+                Export
+              </button>
+              <button class="btn btn-text">
+                <span class="material-icons">bookmark</span>
+                Save
+              </button>
+            </div>
+          </div>
+          <canvas id="irrigationChart"></canvas>
+        </div>
+
+        <!-- Manual Control Card -->
+        <div class="card card-elevated">
+          <div class="card-content">
+            <h3 style="margin-bottom: 16px; color: var(--md-sys-color-on-surface);">Manual Valve Control</h3>
+            <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+              <button class="btn btn-success" onclick="controlValve('ON')" style="flex: 1;">
+                <span class="material-icons">play_arrow</span>
+                Turn ON Valve
+              </button>
+              <button class="btn btn-error" onclick="controlValve('OFF')" style="flex: 1;">
+                <span class="material-icons">stop</span>
+                Turn OFF Valve
+              </button>
+            </div>
+            <div id="status"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Solar Section -->
+      <section id="solar" class="section">
+        <div class="card-header">
+          <h1 class="card-title">
+            <span class="material-icons">solar_power</span>
+            Solar Energy Monitoring
+          </h1>
+          <p style="color: var(--md-sys-color-on-surface-variant); margin-top: 8px;">Track energy production and consumption in real-time</p>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="material-icons">solar_power</span>
+              <span>Solar Generation</span>
+            </div>
+            <div class="stat-value" id="solarPower">3.8 kW</div>
+            <div class="stat-change positive">
+              <span class="material-icons">trending_up</span>
+              12% from yesterday
+            </div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="material-icons">battery_3_bar</span>
+              <span>Battery Level</span>
+            </div>
+            <div class="stat-value" id="batteryLevel">60%</div>
+            <div class="stat-change" id="batteryStatus">5 hrs backup remaining</div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="material-icons">bolt</span>
+              <span>Energy Usage</span>
+            </div>
+            <div class="stat-value">2.4 kW</div>
+            <div class="stat-change negative">
+              <span class="material-icons">trending_up</span>
+              8% from yesterday
+            </div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="material-icons">savings</span>
+              <span>Cost Savings</span>
+            </div>
+            <div class="stat-value">$12.50</div>
+            <div class="stat-change positive">
+              <span class="material-icons">trending_up</span>
+              Today's savings
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-container card-elevated">
+          <div class="chart-header">
+            <h2 class="chart-title">Energy Production & Consumption</h2>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn btn-outlined">
+                <span class="material-icons">file_download</span>
+                Export
+              </button>
+              <button class="btn btn-text">
+                <span class="material-icons">bookmark</span>
+                Save
+              </button>
+            </div>
+          </div>
+          <canvas id="energyChart"></canvas>
+        </div>
+      </section>
+
+      <!-- AI Section -->
+      <section id="ai" class="section">
+        <div class="card-header">
+          <h1 class="card-title">
+            <span class="material-icons">psychology</span>
+            AI-Powered Farm Insights
+          </h1>
+          <p style="color: var(--md-sys-color-on-surface-variant); margin-top: 8px;">Smart recommendations to optimize your farm's productivity</p>
+        </div>
+
+        <div class="card card-elevated">
+          <div class="card-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+              <h2 style="color: var(--md-sys-color-on-surface);">AI Recommendations</h2>
+              <button class="btn btn-filled" onclick="generateSuggestions()">
+                <span class="material-icons">refresh</span>
+                Generate New
+              </button>
             </div>
             
-            <div class="suggestion-details" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
-              <div class="detail-item" style="display: flex; align-items: center; gap: 10px;">
-                <i class="fas fa-bolt"></i>
-                <span>Energy efficiency: 92%</span>
+            <div style="background: var(--md-sys-color-tertiary-container); color: var(--md-sys-color-on-tertiary-container); padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+              <div id="suggestionTitle" style="font-weight: 500; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                <span class="material-icons">lightbulb</span>
+                Optimal Conditions
               </div>
-              <div class="detail-item" style="display: flex; align-items: center; gap: 10px;">
-                <i class="fas fa-tint"></i>
-                <span>Water savings: 15%</span>
+              <div id="suggestionText" style="line-height: 1.6; margin-bottom: 16px;">
+                Current farming parameters are within optimal ranges. Continue with scheduled irrigation and fertilization.
               </div>
-              <div class="detail-item" style="display: flex; align-items: center; gap: 10px;">
-                <i class="fas fa-chart-line"></i>
-                <span>Yield projection: +8%</span>
+              
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span class="material-icons">bolt</span>
+                  <span>Energy efficiency: 92%</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span class="material-icons">water_drop</span>
+                  <span>Water savings: 15%</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span class="material-icons">trending_up</span>
+                  <span>Yield projection: +8%</span>
+                </div>
               </div>
             </div>
-          </div>
-          
-          <div class="action-buttons" style="display: flex; gap: 10px; margin-top: 20px;">
-            <button class="btn btn-primary">
-              <i class="fas fa-check-circle"></i> Apply Recommendations
-            </button>
-            <button class="btn btn-secondary">
-              <i class="fas fa-info-circle"></i> View Details
-            </button>
+            
+            <div style="display: flex; gap: 12px;">
+              <button class="btn btn-filled">
+                <span class="material-icons">check_circle</span>
+                Apply Recommendations
+              </button>
+              <button class="btn btn-outlined">
+                <span class="material-icons">info</span>
+                View Details
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-      
-      <div class="chart-container">
-        <div class="chart-header">
-          <h2><i class="fas fa-chart-line"></i> Resource Usage Analysis</h2>
-        </div>
-        <canvas id="farmChart"></canvas>
-      </div>
-    </section>
 
-    <footer>
-      <p>© 2023 SmartFarm Analytics · Intelligent farming solutions for a sustainable future</p>
-    </footer>
+        <div class="chart-container card-elevated">
+          <div class="chart-header">
+            <h2 class="chart-title">Resource Usage Analysis</h2>
+          </div>
+          <canvas id="farmChart"></canvas>
+        </div>
+      </section>
+    </div>
+
+    <!-- Floating Action Button -->
+    <button class="fab" onclick="generateSuggestions()" title="Get AI Suggestions">
+      <span class="material-icons">psychology</span>
+    </button>
   </div>
 
+    <!-- Home Section -->
   <script>
+    // Global variables
+    let selectedSSID = '';
+    let overrideTimer = null;
+    let overrideStartTime = null;
+
     // Navigation function
     function showSection(sectionId) {
       // Hide all sections
-      document.querySelectorAll('.dashboard-section').forEach(section => {
+      document.querySelectorAll('.section').forEach(section => {
         section.classList.remove('active');
       });
       
       // Show selected section
       document.getElementById(sectionId).classList.add('active');
       
-      // Update navigation links
-      document.querySelectorAll('.nav-links a').forEach(link => {
-        link.classList.remove('active');
+      // Update navigation tabs
+      document.querySelectorAll('.nav-tab').forEach(tab => {
+        tab.classList.remove('active');
       });
       
-      // Add active class to clicked link
+      // Add active class to clicked tab
       event.currentTarget.classList.add('active');
       
-      // If moving to a dashboard section, initialize charts
+      // Add animation
+      document.getElementById(sectionId).classList.add('animate-in');
+      
+      // Initialize charts if needed
       if (sectionId !== 'home') {
         setTimeout(initializeCharts, 100);
       }
+    }
+
+    // Valve control function for irrigation section
+    function controlValve(action) {
+      const btn = event.target;
+      btn.classList.add('loading');
+      btn.disabled = true;
+      
+      // Simulate API call
+      setTimeout(() => {
+        if (action === 'ON') {
+          showStatus('Valve turned ON - Manual override for 5 minutes', 'success');
+          startOverrideTimer();
+        } else {
+          showStatus('Valve turned OFF - Manual override for 5 minutes', 'success');
+          startOverrideTimer();
+        }
+        
+        btn.classList.remove('loading');
+        btn.disabled = false;
+      }, 1000);
+    }
+
+    // Status display function
+    function showStatus(message, type) {
+      const statusDiv = document.getElementById('status');
+      statusDiv.innerHTML = `<div class="status-message ${type}">
+        <span class="material-icons">${type === 'success' ? 'check_circle' : type === 'error' ? 'error' : 'info'}</span>
+        ${message}
+      </div>`;
+      
+      setTimeout(() => {
+        statusDiv.innerHTML = '';
+      }, type === 'success' ? 5000 : 10000);
+    }
+
+    // Override timer functions
+    function startOverrideTimer() {
+      overrideStartTime = Date.now();
+      const overrideStatus = document.getElementById('overrideStatus');
+      if (overrideStatus) {
+        overrideStatus.style.display = 'flex';
+        updateOverrideTimer();
+        overrideTimer = setInterval(updateOverrideTimer, 1000);
+      }
+    }
+
+    function updateOverrideTimer() {
+      const elapsed = Math.floor((Date.now() - overrideStartTime) / 1000);
+      const remaining = Math.max(0, 300 - elapsed);
+      
+      if (remaining <= 0) {
+        clearOverrideTimer();
+        return;
+      }
+      
+      const minutes = Math.floor(remaining / 60);
+      const seconds = remaining % 60;
+      const timerElement = document.getElementById('overrideTimer');
+      if (timerElement) {
+        timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+      }
+    }
+
+    function clearOverrideTimer() {
+      if (overrideTimer) {
+        clearInterval(overrideTimer);
+        overrideTimer = null;
+      }
+      const overrideStatus = document.getElementById('overrideStatus');
+      if (overrideStatus) {
+        overrideStatus.style.display = 'none';
+      }
+      overrideStartTime = null;
     }
 
     // Initialize all charts
@@ -1086,141 +1544,100 @@
 
     // Irrigation Chart
     function initIrrigationChart() {
-      const ctx = document.getElementById('irrigationChart').getContext('2d');
+      const canvas = document.getElementById('irrigationChart');
+      if (!canvas) return;
       
-      // Dummy data for different timeframes
-      const datasets = {
-        day: { labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"], data: [12, 19, 7, 15, 10, 22, 18] },
-        week: { labels: ["Week 1", "Week 2", "Week 3", "Week 4"], data: [80, 95, 70, 100] },
-        month: { labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"], data: [300, 280, 350, 400, 360, 420] },
-        hour: { labels: ["1AM","4AM","7AM","10AM","1PM","4PM","7PM","10PM"], data: [5, 7, 12, 10, 15, 8, 6, 4] }
-      };
+      const ctx = canvas.getContext('2d');
+      
+      const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+      gradient.addColorStop(0, 'rgba(0, 106, 107, 0.2)');
+      gradient.addColorStop(1, 'rgba(0, 106, 107, 0.05)');
 
-      // Create gradient for chart
-      let gradient = ctx.createLinearGradient(0, 0, 0, 400);
-      gradient.addColorStop(0, 'rgba(52, 152, 219, 0.8)');
-      gradient.addColorStop(1, 'rgba(52, 152, 219, 0.1)');
-
-      let irrigationChart = new Chart(ctx, {
+      new Chart(ctx, {
         type: 'line',
         data: {
-          labels: datasets.day.labels,
+          labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
           datasets: [{
             label: 'Water Usage (Liters)',
-            data: datasets.day.data,
-            borderColor: '#3498db',
+            data: [120, 190, 70, 150, 100, 220, 180],
+            borderColor: 'var(--md-sys-color-primary)',
             backgroundColor: gradient,
             borderWidth: 2,
             tension: 0.4,
             fill: true,
-            pointBackgroundColor: '#2980b9'
+            pointBackgroundColor: 'var(--md-sys-color-primary)',
+            pointBorderColor: 'var(--md-sys-color-surface)',
+            pointBorderWidth: 2,
+            pointRadius: 6
           }]
         },
         options: {
           responsive: true,
           plugins: {
-            legend: { display: true, labels: { color: 'var(--text-primary)' } }
+            legend: { 
+              display: true, 
+              labels: { 
+                color: 'var(--md-sys-color-on-surface)',
+                usePointStyle: true,
+                padding: 20
+              } 
+            }
           },
           scales: {
             x: { 
-              grid: {
-                color: "var(--card-border)"
-              },
-              ticks: { color: 'var(--text-primary)' } 
+              grid: { color: "var(--md-sys-color-outline-variant)" },
+              ticks: { color: 'var(--md-sys-color-on-surface-variant)' } 
             },
             y: { 
-              grid: {
-                color: "var(--card-border)"
-              },
-              ticks: { color: 'var(--text-primary)' } 
+              grid: { color: "var(--md-sys-color-outline-variant)" },
+              ticks: { color: 'var(--md-sys-color-on-surface-variant)' } 
             }
           }
         }
-      });
-
-      // Update chart when timeframe changes
-      document.querySelectorAll('.timeframe-btn').forEach(button => {
-        button.addEventListener('click', function() {
-          document.querySelectorAll('.timeframe-btn').forEach(btn => {
-            btn.classList.remove('active');
-          });
-          this.classList.add('active');
-          
-          const value = this.getAttribute('data-value');
-          irrigationChart.data.labels = datasets[value].labels;
-          irrigationChart.data.datasets[0].data = datasets[value].data;
-          irrigationChart.update();
-        });
       });
     }
 
     // Energy Chart
     function initEnergyChart() {
-      const ctx = document.getElementById('energyChart').getContext('2d');
+      const canvas = document.getElementById('energyChart');
+      if (!canvas) return;
       
-      // Enhanced dummy data for different timeframes
-      const datasets = {
-        hour: { 
-          labels: ["12AM", "2AM", "4AM", "6AM", "8AM", "10AM", "12PM", "2PM", "4PM", "6PM", "8PM", "10PM"], 
-          production: [0, 0, 0, 0.5, 1.8, 3.2, 3.8, 3.5, 2.8, 1.2, 0.2, 0],
-          consumption: [0.8, 0.6, 0.5, 0.7, 1.2, 1.8, 2.2, 2.5, 2.8, 2.5, 1.8, 1.2],
-          dateRange: "Last 24 Hours"
-        },
-        day: { 
-          labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"], 
-          production: [18, 22, 20, 24, 26, 30, 28],
-          consumption: [22, 24, 20, 23, 25, 28, 26],
-          dateRange: "Last 7 Days"
-        },
-        week: { 
-          labels: ["Week 1", "Week 2", "Week 3", "Week 4"], 
-          production: [120, 135, 125, 145],
-          consumption: [140, 145, 135, 150],
-          dateRange: "Last 4 Weeks"
-        },
-        month: { 
-          labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"], 
-          production: [450, 480, 520, 560, 620, 650],
-          consumption: [520, 540, 560, 580, 600, 620],
-          dateRange: "Last 6 Months"
-        }
-      };
-
-      // Create gradients for chart
-      let productionGradient = ctx.createLinearGradient(0, 0, 0, 400);
-      productionGradient.addColorStop(0, 'rgba(46, 204, 113, 0.8)');
-      productionGradient.addColorStop(1, 'rgba(46, 204, 113, 0.1)');
+      const ctx = canvas.getContext('2d');
       
-      let consumptionGradient = ctx.createLinearGradient(0, 0, 0, 400);
-      consumptionGradient.addColorStop(0, 'rgba(52, 152, 219, 0.8)');
-      consumptionGradient.addColorStop(1, 'rgba(52, 152, 219, 0.1)');
+      const productionGradient = ctx.createLinearGradient(0, 0, 0, 400);
+      productionGradient.addColorStop(0, 'rgba(76, 175, 80, 0.2)');
+      productionGradient.addColorStop(1, 'rgba(76, 175, 80, 0.05)');
+      
+      const consumptionGradient = ctx.createLinearGradient(0, 0, 0, 400);
+      consumptionGradient.addColorStop(0, 'rgba(0, 106, 107, 0.2)');
+      consumptionGradient.addColorStop(1, 'rgba(0, 106, 107, 0.05)');
 
-      let energyChart = new Chart(ctx, {
+      new Chart(ctx, {
         type: 'line',
         data: {
-          labels: datasets.hour.labels,
+          labels: ["12AM", "4AM", "8AM", "12PM", "4PM", "8PM"],
           datasets: [{
             label: 'Energy Production (kWh)',
-            data: datasets.hour.production,
-            borderColor: '#2ecc71',
+            data: [0, 0, 1.8, 3.8, 2.8, 0.2],
+            borderColor: '#4CAF50',
             backgroundColor: productionGradient,
             fill: true,
             tension: 0.4,
-            pointBackgroundColor: '#fff',
+            pointBackgroundColor: '#4CAF50',
+            pointBorderColor: 'var(--md-sys-color-surface)',
             pointBorderWidth: 2,
-            pointRadius: 4,
-            pointHoverRadius: 7
-          },{
+            pointRadius: 6
+          }, {
             label: 'Energy Consumption (kWh)',
-            data: datasets.hour.consumption,
-            borderColor: '#3498db',
+            data: [0.8, 0.5, 1.2, 2.2, 2.8, 1.8],
+            borderColor: 'var(--md-sys-color-primary)',
             backgroundColor: consumptionGradient,
             fill: true,
             tension: 0.4,
-            pointBackgroundColor: '#fff',
+            pointBackgroundColor: 'var(--md-sys-color-primary)',
+            pointBorderColor: 'var(--md-sys-color-surface)',
             pointBorderWidth: 2,
-            pointRadius: 4,
-            pointHoverRadius: 7
+            pointRadius: 6
           }]
         },
         options: {
@@ -1228,110 +1645,34 @@
           plugins: { 
             legend: { 
               labels: { 
-                color: "var(--text-primary)",
-                font: {
-                  weight: '600'
-                }
+                color: "var(--md-sys-color-on-surface)",
+                usePointStyle: true,
+                padding: 20
               } 
-            },
-            tooltip: {
-              mode: 'index',
-              intersect: false,
-              backgroundColor: 'var(--bg-secondary)',
-              titleColor: 'var(--text-primary)',
-              bodyColor: 'var(--text-primary)',
-              titleFont: {
-                size: 14,
-                weight: '600'
-              },
-              bodyFont: {
-                size: 13
-              },
-              padding: 10,
-              borderColor: 'var(--card-border)',
-              borderWidth: 1
             }
           },
           scales: {
             x: { 
-              grid: {
-                color: "var(--card-border)"
-              },
-              ticks: { 
-                color: "var(--text-primary)",
-                font: {
-                  weight: '500'
-                }
-              } 
+              grid: { color: "var(--md-sys-color-outline-variant)" },
+              ticks: { color: "var(--md-sys-color-on-surface-variant)" } 
             },
             y: { 
-              grid: {
-                color: "var(--card-border)"
-              },
-              ticks: { 
-                color: "var(--text-primary)",
-                font: {
-                  weight: '500'
-                }
-              },
-              title: {
-                display: true,
-                text: 'kWh',
-                color: "var(--text-primary)"
-              }
+              grid: { color: "var(--md-sys-color-outline-variant)" },
+              ticks: { color: "var(--md-sys-color-on-surface-variant)" } 
             }
-          },
-          interaction: {
-            mode: 'nearest',
-            axis: 'x',
-            intersect: false
           }
         }
-      });
-
-      // Update chart when timeframe changes
-      document.querySelectorAll('#solar .timeframe-btn').forEach(button => {
-        button.addEventListener('click', function() {
-          document.querySelectorAll('#solar .timeframe-btn').forEach(btn => {
-            btn.classList.remove('active');
-          });
-          this.classList.add('active');
-          
-          const value = this.getAttribute('data-value');
-          energyChart.data.labels = datasets[value].labels;
-          energyChart.data.datasets[0].data = datasets[value].production;
-          energyChart.data.datasets[1].data = datasets[value].consumption;
-          energyChart.update();
-          
-          // Update date range text
-          document.getElementById('dateRange').innerText = datasets[value].dateRange;
-          
-          // Update solar power value based on timeframe
-          const currentProduction = datasets[value].production[datasets[value].production.length - 1];
-          document.getElementById('solarPower').innerText = value === 'hour' ? 
-            `${currentProduction.toFixed(1)} kW` : `${currentProduction} kWh`;
-        });
       });
     }
 
     // Farm Chart for AI Section
     function initFarmChart() {
-      const ctx = document.getElementById('farmChart').getContext('2d');
+      const canvas = document.getElementById('farmChart');
+      if (!canvas) return;
       
-      // Create gradients
-      const energyGradient = ctx.createLinearGradient(0, 0, 0, 400);
-      energyGradient.addColorStop(0, 'rgba(52, 152, 219, 0.8)');
-      energyGradient.addColorStop(1, 'rgba(52, 152, 219, 0.1)');
-      
-      const waterGradient = ctx.createLinearGradient(0, 0, 0, 400);
-      waterGradient.addColorStop(0, 'rgba(46, 204, 113, 0.8)');
-      waterGradient.addColorStop(1, 'rgba(46, 204, 113, 0.1)');
-      
-      const fertilizerGradient = ctx.createLinearGradient(0, 0, 0, 400);
-      fertilizerGradient.addColorStop(0, 'rgba(230, 126, 34, 0.8)');
-      fertilizerGradient.addColorStop(1, 'rgba(230, 126, 34, 0.1)');
+      const ctx = canvas.getContext('2d');
 
-      const farmChart = new Chart(ctx, {
+      new Chart(ctx, {
         type: 'line',
         data: {
           labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
@@ -1339,35 +1680,26 @@
             {
               label: 'Energy (kWh)',
               data: [30, 40, 35, 50, 45, 42, 48],
-              borderColor: '#3498db',
-              backgroundColor: energyGradient,
+              borderColor: 'var(--md-sys-color-primary)',
+              backgroundColor: 'rgba(0, 106, 107, 0.1)',
               fill: true,
-              tension: 0.4,
-              pointBackgroundColor: '#fff',
-              pointBorderWidth: 2,
-              pointRadius: 4
+              tension: 0.4
             },
             {
               label: 'Water Used (L)',
               data: [100, 120, 150, 130, 160, 110, 140],
-              borderColor: '#2ecc71',
-              backgroundColor: waterGradient,
+              borderColor: '#4CAF50',
+              backgroundColor: 'rgba(76, 175, 80, 0.1)',
               fill: true,
-              tension: 0.4,
-              pointBackgroundColor: '#fff',
-              pointBorderWidth: 2,
-              pointRadius: 4
+              tension: 0.4
             },
             {
               label: 'Fertilizer Mix (%)',
               data: [40, 50, 60, 55, 65, 70, 60],
-              borderColor: '#e67e22',
-              backgroundColor: fertilizerGradient,
+              borderColor: '#FF9800',
+              backgroundColor: 'rgba(255, 152, 0, 0.1)',
               fill: true,
-              tension: 0.4,
-              pointBackgroundColor: '#fff',
-              pointBorderWidth: 2,
-              pointRadius: 4
+              tension: 0.4
             }
           ]
         },
@@ -1376,177 +1708,93 @@
           plugins: { 
             legend: { 
               labels: { 
-                color: "var(--text-primary)",
-                font: {
-                  weight: '600'
-                }
+                color: "var(--md-sys-color-on-surface)",
+                usePointStyle: true,
+                padding: 20
               } 
-            },
-            tooltip: {
-              mode: 'index',
-              intersect: false,
-              backgroundColor: 'var(--bg-secondary)',
-              titleColor: 'var(--text-primary)',
-              bodyColor: 'var(--text-primary)',
-              titleFont: {
-                size: 14,
-                weight: '600'
-              },
-              bodyFont: {
-                size: 13
-              },
-              padding: 10,
-              borderColor: 'var(--card-border)',
-              borderWidth: 1
             }
           },
           scales: {
             x: { 
-              grid: {
-                color: "var(--card-border)"
-              },
-              ticks: { 
-                color: "var(--text-primary)",
-                font: {
-                  weight: '500'
-                }
-              } 
+              grid: { color: "var(--md-sys-color-outline-variant)" },
+              ticks: { color: "var(--md-sys-color-on-surface-variant)" } 
             },
             y: { 
-              grid: {
-                color: "var(--card-border)"
-              },
-              ticks: { 
-                color: "var(--text-primary)",
-                font: {
-                  weight: '500'
-                }
-              } 
+              grid: { color: "var(--md-sys-color-outline-variant)" },
+              ticks: { color: "var(--md-sys-color-on-surface-variant)" } 
             }
-          },
-          interaction: {
-            mode: 'nearest',
-            axis: 'x',
-            intersect: false
           }
         }
       });
     }
 
+    // AI Suggestion Logic
+    function generateSuggestions() {
+      const titles = [
+        "Optimal Conditions",
+        "Rain Detected", 
+        "Dry Season Alert",
+        "High Temperature Warning",
+        "Over-Irrigation Alert"
+      ];
+      
+      const suggestions = [
+        "✅ Conditions are optimal → Continue with current irrigation and fertilization schedule. Monitor for changes in weather conditions.",
+        "🌧 Rainfall recorded today → Skip irrigation to save water and energy. Delay fertilization to prevent runoff.",
+        "☀️ Dry conditions detected → Increase water frequency but use drip irrigation to minimize evaporation.",
+        "🔥 High temperatures detected → Increase irrigation frequency but reduce duration to prevent evaporation.",
+        "⚠️ Too much water detected → Risk of fertilizer dilution and nutrient runoff. Reduce irrigation levels."
+      ];
+      
+      const randomIndex = Math.floor(Math.random() * titles.length);
+      
+      document.getElementById("suggestionTitle").innerHTML = `<span class="material-icons">lightbulb</span>${titles[randomIndex]}`;
+      document.getElementById("suggestionText").innerText = suggestions[randomIndex];
+    }
+
     // Battery simulation
     let battery = 60;
     function updateBattery() {
-      battery = (battery + Math.random() * 5 - 2) % 100;
-      if (battery < 10) battery = 10;
-      document.getElementById("batteryLevel").innerText = `${battery.toFixed(0)}%`;
-      document.getElementById("batteryStatus").innerText = `${(battery/12).toFixed(1)} hrs backup remaining`;
+      battery = Math.max(10, Math.min(100, battery + Math.random() * 10 - 5));
+      const batteryElement = document.getElementById("batteryLevel");
+      const batteryStatus = document.getElementById("batteryStatus");
+      
+      if (batteryElement) batteryElement.innerText = `${battery.toFixed(0)}%`;
+      if (batteryStatus) batteryStatus.innerText = `${(battery/12).toFixed(1)} hrs backup remaining`;
     }
     setInterval(updateBattery, 4000);
 
-    // Farm data for AI suggestions
-    const farmData = {
-      energy: 40,
-      battery: 75,
-      water: 120,
-      fertilizer: 60,
-      temperature: 26,
-      humidity: 65,
-      rainfall: true,
-      drySeason: false,
-      cloudCover: 35
-    };
-
-    // AI Suggestion Logic
-    function generateSuggestions() {
-      let title = "";
-      let text = "";
-      let efficiency = 92;
-      let waterSavings = 15;
-      let yieldProjection = 8;
-      
-      if (farmData.rainfall) {
-        title = "Rain Detected";
-        text = "🌧 Rainfall recorded today → Skip irrigation to save water and energy. Delay fertilization to prevent runoff.";
-        waterSavings = 45;
-      } else if (farmData.drySeason && farmData.water < 200) {
-        title = "Dry Season Alert";
-        text = "☀️ Dry conditions detected → Increase water frequency but use drip irrigation to minimize evaporation. Consider adding mulch to retain soil moisture.";
-        efficiency = 85;
-        waterSavings = 5;
-      } else if (farmData.water > 300 && farmData.fertilizer > 50) {
-        title = "Over-Irrigation Warning";
-        text = "⚠️ Too much water detected → Risk of fertilizer dilution and nutrient runoff. Reduce irrigation and monitor soil moisture levels.";
-        efficiency = 75;
-        waterSavings = 25;
-        yieldProjection = -5;
-      } else if (farmData.temperature > 30) {
-        title = "High Temperature";
-        text = "🔥 High temperatures detected → Increase irrigation frequency but reduce duration to prevent evaporation. Consider shade solutions for sensitive crops.";
-        efficiency = 88;
-        waterSavings = 10;
-      } else {
-        title = "Optimal Conditions";
-        text = "✅ Conditions are optimal → Continue with current irrigation and fertilization schedule. Monitor for changes in weather conditions.";
-      }
-
-      // Update UI
-      document.getElementById("suggestionTitle").innerText = title;
-      document.getElementById("suggestionText").innerText = text;
-      
-      // Update details
-      document.querySelectorAll(".suggestion-details .detail-item:nth-child(2) span").textContent = 
-        `Water savings: ${waterSavings}%`;
-      document.querySelectorAll(".suggestion-details .detail-item:nth-child(1) span").textContent = 
-        `Energy efficiency: ${efficiency}%`;
-      document.querySelectorAll(".suggestion-details .detail-item:nth-child(3) span").textContent = 
-        `Yield projection: ${yieldProjection > 0 ? '+' : ''}${yieldProjection}%`;
-    }
-
     // Dark mode toggle functionality
-    const toggleSwitch = document.querySelector('#checkbox');
+    const themeToggle = document.querySelector('#themeToggle');
     const currentTheme = localStorage.getItem('theme') || 'light';
 
-    if (currentTheme) {
-      document.documentElement.setAttribute('data-theme', currentTheme);
-      
-      if (currentTheme === 'dark') {
-        toggleSwitch.checked = true;
-      }
+    if (currentTheme === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      if (themeToggle) themeToggle.checked = true;
     }
 
     function switchTheme(e) {
       if (e.target.checked) {
         document.documentElement.setAttribute('data-theme', 'dark');
         localStorage.setItem('theme', 'dark');
+        e.target.parentElement.querySelector('.material-icons').textContent = 'dark_mode';
       } else {
         document.documentElement.setAttribute('data-theme', 'light');
         localStorage.setItem('theme', 'light');
+        e.target.parentElement.querySelector('.material-icons').textContent = 'light_mode';
       }
-      
-      // Update all charts for the new theme
-      if (typeof irrigationChart !== 'undefined') irrigationChart.update();
-      if (typeof energyChart !== 'undefined') energyChart.update();
-      if (typeof farmChart !== 'undefined') farmChart.update();
     }
 
-    toggleSwitch.addEventListener('change', switchTheme, false);
+    if (themeToggle) {
+      themeToggle.addEventListener('change', switchTheme, false);
+    }
 
     // Initialize the page
     window.onload = function() {
       initializeCharts();
       generateSuggestions();
-      
-      // Initialize Typed.js for hero text animation if on home page
-      if (document.getElementById('home').classList.contains('active')) {
-        new Typed("#typed-text", {
-          strings: ["Live Solar Data", "Battery Monitoring", "Smart Energy Usage", "Weather-based Suggestions"],
-          typeSpeed: 50,
-          backSpeed: 25,
-          loop: true
-        });
-      }
+      updateBattery();
     };
   </script>
-  </div> <!-- End mainContent -->
 </body>
 </html>

@@ -30,11 +30,12 @@ import {
   TrendingUp,
   Dashboard as DashboardIcon,
   DeviceHub as DeviceIcon,
-  Analytics as AnalyticsIcon
+  Analytics as AnalyticsIcon,
+  LightMode as LightModeIcon,
+  DarkMode as DarkModeIcon,
 } from '@mui/icons-material';
 import MoistureChart from './MoistureChart';
 import DeviceManager from './DeviceManager';
-import NotificationSystem from './NotificationSystem';
 import AnalyticsDashboard from './AnalyticsDashboard';
 
 // Animations
@@ -67,126 +68,92 @@ const float = keyframes`
   }
 `;
 
-// Styled Components
-const DashboardContainer = styled(Box)({
+// Material Design 3 Styled Components
+const DashboardContainer = styled(Box)(({ theme }) => ({
   minHeight: '100vh',
-  background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.6))',
-  backdropFilter: 'blur(10px)',
-  position: 'relative',
-  overflow: 'hidden',
-});
-
-const GlassAppBar = styled(AppBar)({
-  background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))',
-  backdropFilter: 'blur(25px)',
-  WebkitBackdropFilter: 'blur(25px)',
-  border: '1px solid rgba(255, 255, 255, 0.18)',
-  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
-  position: 'relative',
-  
-  '&::before': {
-    content: '""',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    height: '1px',
-    background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent)',
-  },
-});
-
-const GlassCard = styled(Card)({
-  background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))',
-  backdropFilter: 'blur(25px)',
-  WebkitBackdropFilter: 'blur(25px)',
-  border: '1px solid rgba(255, 255, 255, 0.18)',
-  borderRadius: '20px',
-  boxShadow: `
-    0 8px 32px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1),
-    0 1px 0 rgba(255, 255, 255, 0.1)
-  `,
-  animation: `${fadeIn} 0.6s ease-out`,
-  transition: 'all 0.3s ease',
-  position: 'relative',
-  overflow: 'hidden',
-  
-  '&:hover': {
-    transform: 'translateY(-5px)',
-    boxShadow: `
-      0 15px 40px rgba(0, 0, 0, 0.4),
-      inset 0 1px 0 rgba(255, 255, 255, 0.15),
-      0 1px 0 rgba(255, 255, 255, 0.15)
-    `,
-    border: '1px solid rgba(255, 255, 255, 0.25)',
-  },
-  
-  '&::before': {
-    content: '""',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    height: '1px',
-    background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent)',
-  },
-});
-
-const SensorValue = styled(Typography)({
-  fontSize: '2.5em',
-  fontWeight: 700,
-  background: 'linear-gradient(135deg, #ffffff, #e0e0e0)',
-  WebkitBackgroundClip: 'text',
-  WebkitTextFillColor: 'transparent',
-  backgroundClip: 'text',
-  animation: `${pulse} 2s ease-in-out infinite`,
-});
-
-const StatusChip = styled(Chip)(({ status }) => ({
-  background: status === 'ON' 
-    ? 'linear-gradient(135deg, rgba(76, 175, 80, 0.8), rgba(56, 142, 60, 0.8))'
-    : 'linear-gradient(135deg, rgba(244, 67, 54, 0.8), rgba(211, 47, 47, 0.8))',
-  color: 'white',
-  backdropFilter: 'blur(10px)',
-  border: '1px solid rgba(255, 255, 255, 0.2)',
-  fontWeight: 600,
-  animation: `${float} 3s ease-in-out infinite`,
+  backgroundColor: theme.palette.background.default,
+  color: theme.palette.text.primary,
 }));
 
-const ControlButton = styled(Button)(({ variant: buttonVariant }) => ({
-  background: buttonVariant === 'on' 
-    ? 'linear-gradient(135deg, rgba(76, 175, 80, 0.8), rgba(56, 142, 60, 0.8))'
-    : 'linear-gradient(135deg, rgba(244, 67, 54, 0.8), rgba(211, 47, 47, 0.8))',
-  backdropFilter: 'blur(20px)',
-  WebkitBackdropFilter: 'blur(20px)',
-  color: 'white',
-  border: '1px solid rgba(255, 255, 255, 0.2)',
-  borderRadius: '15px',
-  padding: '12px 24px',
-  fontWeight: 600,
+const MD3AppBar = styled(AppBar)(({ theme }) => ({
+  backgroundColor: theme.palette.md3?.surface || theme.palette.background.paper,
+  color: theme.palette.md3?.onSurface || theme.palette.text.primary,
+  borderBottom: `1px solid ${theme.palette.md3?.outlineVariant || theme.palette.divider}`,
+  boxShadow: theme.palette.mode === 'light' 
+    ? '0px 1px 3px rgba(0,0,0,0.12)'
+    : '0px 1px 3px rgba(255,255,255,0.12)',
+}));
+
+const MD3Card = styled(Card)(({ theme }) => ({
+  backgroundColor: theme.palette.md3?.surface || theme.palette.background.paper,
+  border: `1px solid ${theme.palette.md3?.outlineVariant || theme.palette.divider}`,
+  borderRadius: '12px',
+  boxShadow: theme.palette.mode === 'light' 
+    ? '0px 1px 3px rgba(0,0,0,0.12), 0px 1px 2px rgba(0,0,0,0.24)'
+    : '0px 1px 3px rgba(255,255,255,0.12), 0px 1px 2px rgba(255,255,255,0.24)',
+  animation: `${fadeIn} 0.6s ease-out`,
   transition: 'all 0.3s ease',
   
   '&:hover': {
     transform: 'translateY(-2px)',
-    boxShadow: '0 10px 25px rgba(0, 0, 0, 0.3)',
-    border: '1px solid rgba(255, 255, 255, 0.3)',
+    boxShadow: theme.palette.mode === 'light' 
+      ? '0px 4px 8px rgba(0,0,0,0.16), 0px 2px 4px rgba(0,0,0,0.32)'
+      : '0px 4px 8px rgba(255,255,255,0.16), 0px 2px 4px rgba(255,255,255,0.32)',
   },
 }));
 
-const RefreshButton = styled(IconButton)({
-  background: 'rgba(255, 255, 255, 0.1)',
-  backdropFilter: 'blur(10px)',
-  border: '1px solid rgba(255, 255, 255, 0.2)',
-  color: 'white',
+const SensorValue = styled(Typography)(({ theme }) => ({
+  fontSize: '2.5em',
+  fontWeight: 400,
+  color: theme.palette.md3?.primary || theme.palette.primary.main,
+  fontFamily: theme.typography.displaySmall?.fontFamily || theme.typography.fontFamily,
+  animation: `${pulse} 2s ease-in-out infinite`,
+}));
+
+const StatusChip = styled(Chip)(({ theme, status }) => ({
+  backgroundColor: status === 'ON' 
+    ? theme.palette.success?.main || '#4CAF50'
+    : theme.palette.error?.main || '#F44336',
+  color: status === 'ON' 
+    ? theme.palette.success?.contrastText || '#FFFFFF'
+    : theme.palette.error?.contrastText || '#FFFFFF',
+  fontWeight: 500,
+  fontSize: '0.75rem',
+  borderRadius: '8px',
+  animation: `${float} 3s ease-in-out infinite`,
+}));
+
+const ControlButton = styled(Button)(({ theme, variant: buttonVariant }) => ({
+  backgroundColor: buttonVariant === 'on' 
+    ? theme.palette.success?.main || '#4CAF50'
+    : theme.palette.error?.main || '#F44336',
+  color: '#FFFFFF',
+  borderRadius: '20px',
+  textTransform: 'none',
+  fontWeight: 500,
+  padding: '10px 24px',
   transition: 'all 0.3s ease',
   
   '&:hover': {
-    background: 'rgba(255, 255, 255, 0.2)',
+    transform: 'translateY(-1px)',
+    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
+  },
+}));
+
+const MD3RefreshButton = styled(IconButton)(({ theme }) => ({
+  backgroundColor: `${theme.palette.md3?.primary || theme.palette.primary.main}0F`,
+  color: theme.palette.md3?.primary || theme.palette.primary.main,
+  border: `1px solid ${theme.palette.md3?.outline || theme.palette.divider}`,
+  borderRadius: '12px',
+  transition: 'all 0.3s ease',
+  
+  '&:hover': {
+    backgroundColor: `${theme.palette.md3?.primary || theme.palette.primary.main}1F`,
     transform: 'rotate(180deg)',
   },
-});
+}));
 
-function Dashboard() {
+function Dashboard({ darkMode, onToggleDarkMode }) {
   const [sensorData, setSensorData] = useState({});
   const [moistureHistory, setMoistureHistory] = useState({});
   const [devices, setDevices] = useState([]);
@@ -195,6 +162,8 @@ function Dashboard() {
   const [lastUpdate, setLastUpdate] = useState(null);
   const [firebaseConnected, setFirebaseConnected] = useState(true);
   const [currentTab, setCurrentTab] = useState(0);
+  const [controlMode, setControlMode] = useState('automatic'); // 'automatic' or 'manual'
+  const [deviceOnlineStatus, setDeviceOnlineStatus] = useState({}); // Track online status per device
 
   const { currentUser, logout } = useAuth();
   const navigate = useNavigate();
@@ -285,6 +254,14 @@ function Dashboard() {
         });
         setLastUpdate(new Date());
         setFirebaseConnected(true);
+        
+        // Update device online status based on last update
+        const now = Date.now();
+        const lastSeen = data.timestamp || now;
+        setDeviceOnlineStatus(prev => ({
+          ...prev,
+          [selectedDevice.deviceId]: (now - lastSeen) < 120000 // Online if last update < 2 minutes
+        }));
       } else {
         console.log('No data found for device:', selectedDevice.deviceId);
         // Set demo data for testing when no real data exists
@@ -445,6 +422,44 @@ function Dashboard() {
     }
   };
 
+  const handleSetAutomaticMode = async () => {
+    if (!selectedDevice) return;
+    
+    try {
+      // Send automatic mode command to device
+      const commandRef = ref(database, `deviceData/${selectedDevice.deviceId}/commands/mode`);
+      await set(commandRef, {
+        command: 'AUTOMATIC',
+        timestamp: new Date().toISOString(),
+        id: Date.now()
+      });
+      
+      console.log('Automatic mode command sent to ESP32');
+    } catch (error) {
+      console.error('Error setting automatic mode:', error);
+      alert('Error setting automatic mode: ' + error.message);
+    }
+  };
+
+  const handleSetManualMode = async () => {
+    if (!selectedDevice) return;
+    
+    try {
+      // Send manual mode command to device
+      const commandRef = ref(database, `deviceData/${selectedDevice.deviceId}/commands/mode`);
+      await set(commandRef, {
+        command: 'MANUAL',
+        timestamp: new Date().toISOString(),
+        id: Date.now()
+      });
+      
+      console.log('Manual mode command sent to ESP32');
+    } catch (error) {
+      console.error('Error setting manual mode:', error);
+      alert('Error setting manual mode: ' + error.message);
+    }
+  };
+
   const handleLogout = async () => {
     try {
       await logout();
@@ -489,14 +504,26 @@ function Dashboard() {
           <CircularProgress 
             size={60} 
             sx={{ 
-              color: 'rgba(255, 255, 255, 0.8)',
+              color: (theme) => theme.palette.md3?.primary || theme.palette.primary.main,
               marginBottom: 2 
             }} 
           />
-          <Typography variant="h6" sx={{ color: 'rgba(255, 255, 255, 0.8)', mb: 1 }}>
+          <Typography 
+            variant="headlineSmall" 
+            sx={{ 
+              color: (theme) => theme.palette.text.primary, 
+              mb: 1 
+            }}
+          >
             Loading Dashboard...
           </Typography>
-          <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.6)' }}>
+          <Typography 
+            variant="bodyMedium" 
+            sx={{ 
+              color: (theme) => theme.palette.text.secondary,
+              mb: 3 
+            }}
+          >
             Checking for your devices...
           </Typography>
           <Button
@@ -506,12 +533,8 @@ function Dashboard() {
               setCurrentTab(1);
             }}
             sx={{ 
-              mt: 3,
-              color: 'white',
-              borderColor: 'rgba(255,255,255,0.3)',
-              '&:hover': {
-                borderColor: 'rgba(255,255,255,0.5)'
-              }
+              textTransform: 'none',
+              borderRadius: '20px',
             }}
           >
             Skip to Device Manager
@@ -603,7 +626,7 @@ function Dashboard() {
         <Grid container spacing={3}>
           {/* Moisture Sensor */}
           <Grid item xs={12} sm={6} md={3}>
-            <GlassCard>
+            <MD3Card>
               <CardContent sx={{ textAlign: 'center', padding: '30px 20px' }}>
                 <Opacity sx={{ fontSize: '3em', color: '#2196f3', marginBottom: 1 }} />
                 <Typography variant="h6" sx={{ color: 'rgba(255, 255, 255, 0.9)', marginBottom: 1 }}>
@@ -616,12 +639,12 @@ function Dashboard() {
                   Moisture Level
                 </Typography>
               </CardContent>
-            </GlassCard>
+            </MD3Card>
           </Grid>
 
           {/* Temperature Sensor */}
           <Grid item xs={12} sm={6} md={3}>
-            <GlassCard>
+            <MD3Card>
               <CardContent sx={{ textAlign: 'center', padding: '30px 20px' }}>
                 <Thermostat sx={{ fontSize: '3em', color: '#ff5722', marginBottom: 1 }} />
                 <Typography variant="h6" sx={{ color: 'rgba(255, 255, 255, 0.9)', marginBottom: 1 }}>
@@ -634,12 +657,12 @@ function Dashboard() {
                   Current Temp
                 </Typography>
               </CardContent>
-            </GlassCard>
+            </MD3Card>
           </Grid>
 
           {/* Humidity Sensor */}
           <Grid item xs={12} sm={6} md={3}>
-            <GlassCard>
+            <MD3Card>
               <CardContent sx={{ textAlign: 'center', padding: '30px 20px' }}>
                 <Water sx={{ fontSize: '3em', color: '#00bcd4', marginBottom: 1 }} />
                 <Typography variant="h6" sx={{ color: 'rgba(255, 255, 255, 0.9)', marginBottom: 1 }}>
@@ -652,18 +675,53 @@ function Dashboard() {
                   Air Humidity
                 </Typography>
               </CardContent>
-            </GlassCard>
+            </MD3Card>
           </Grid>
 
           {/* Valve Control */}
           <Grid item xs={12} sm={6} md={3}>
-            <GlassCard>
+            <MD3Card>
               <CardContent sx={{ textAlign: 'center', padding: '30px 20px' }}>
                 <PowerSettingsNew sx={{ fontSize: '3em', color: '#4caf50', marginBottom: 1 }} />
                 <Typography variant="h6" sx={{ color: 'rgba(255, 255, 255, 0.9)', marginBottom: 1 }}>
                   Valve Control
                 </Typography>
                 
+                {/* Control Mode Toggle */}
+                <Box sx={{ marginBottom: 2 }}>
+                  <Tabs 
+                    value={controlMode} 
+                    onChange={(e, newValue) => {
+                      setControlMode(newValue);
+                      if (newValue === 'automatic') {
+                        handleSetAutomaticMode();
+                      } else if (newValue === 'manual') {
+                        handleSetManualMode();
+                      }
+                    }}
+                    variant="fullWidth"
+                    sx={{
+                      '& .MuiTab-root': {
+                        color: 'rgba(255, 255, 255, 0.7)',
+                        fontSize: '0.75rem',
+                        minHeight: '32px',
+                        padding: '6px 12px',
+                      },
+                      '& .Mui-selected': {
+                        color: '#4caf50 !important',
+                      },
+                      '& .MuiTabs-indicator': {
+                        backgroundColor: '#4caf50',
+                        height: '2px',
+                      },
+                    }}
+                  >
+                    <Tab label="Auto" value="automatic" />
+                    <Tab label="Manual" value="manual" />
+                  </Tabs>
+                </Box>
+                
+                {/* Status Display */}
                 <Box sx={{ marginBottom: 2 }}>
                   <StatusChip 
                     label={sensorData.valveStatus === 'ON' ? 'OPEN' : 'CLOSED'}
@@ -671,32 +729,56 @@ function Dashboard() {
                   />
                 </Box>
                 
-                <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center', flexWrap: 'wrap' }}>
-                  <ControlButton
-                    variant="on"
-                    onClick={() => handleValveControl('ON')}
-                    disabled={sensorData.valveStatus === 'ON'}
-                    size="small"
-                  >
-                    Open
-                  </ControlButton>
-                  <ControlButton
-                    variant="off"
-                    onClick={() => handleValveControl('OFF')}
-                    disabled={sensorData.valveStatus === 'OFF'}
-                    size="small"
-                  >
-                    Close
-                  </ControlButton>
-                </Box>
+                {/* Control Interface */}
+                {controlMode === 'automatic' ? (
+                  <Box sx={{ textAlign: 'center' }}>
+                    <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.6)', mb: 1 }}>
+                      Automatic Mode Active
+                    </Typography>
+                    <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.5)' }}>
+                      System controls valve based on moisture levels
+                    </Typography>
+                  </Box>
+                ) : (
+                  <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center', flexWrap: 'wrap' }}>
+                    <ControlButton
+                      variant="on"
+                      onClick={() => handleValveControl('ON')}
+                      disabled={sensorData.valveStatus === 'ON'}
+                      size="small"
+                    >
+                      Open
+                    </ControlButton>
+                    <ControlButton
+                      variant="off"
+                      onClick={() => handleValveControl('OFF')}
+                      disabled={sensorData.valveStatus === 'OFF'}
+                      size="small"
+                    >
+                      Close
+                    </ControlButton>
+                  </Box>
+                )}
+                
+                {/* Device Status - Only show if online */}
+                {selectedDevice && deviceOnlineStatus[selectedDevice.deviceId] && (
+                  <Box sx={{ mt: 2 }}>
+                    <Chip
+                      size="small"
+                      label="Device Online"
+                      color="success"
+                      sx={{ fontSize: '0.7rem' }}
+                    />
+                  </Box>
+                )}
               </CardContent>
-            </GlassCard>
+            </MD3Card>
           </Grid>
 
           {/* Moisture Chart */}
           {moistureHistory.length > 0 && (
             <Grid item xs={12}>
-              <GlassCard>
+              <MD3Card>
                 <CardContent sx={{ padding: '30px' }}>
                   <MoistureChart 
                     moistureData={moistureHistory} 
@@ -704,13 +786,13 @@ function Dashboard() {
                     onRefresh={handleRefresh}
                   />
                 </CardContent>
-              </GlassCard>
+              </MD3Card>
             </Grid>
           )}
 
           {/* Enhanced Device Controls */}
           <Grid item xs={12}>
-            <GlassCard>
+            <MD3Card>
               <CardContent sx={{ padding: '30px' }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 3 }}>
                   <PowerSettingsNew sx={{ fontSize: '2em', color: '#4caf50', marginRight: 1 }} />
@@ -720,7 +802,7 @@ function Dashboard() {
                 </Box>
                 
                 <Grid container spacing={3}>
-                  {/* Manual Valve Control */}
+                  {/* Enhanced Valve Control */}
                   <Grid item xs={12} md={6}>
                     <Box sx={{ 
                       p: 3, 
@@ -729,37 +811,121 @@ function Dashboard() {
                       border: '1px solid rgba(255, 255, 255, 0.1)'
                     }}>
                       <Typography variant="h6" sx={{ color: 'white', mb: 2 }}>
-                        Manual Valve Control
+                        Enhanced Valve Control
                       </Typography>
                       
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
-                        <StatusChip 
-                          label={sensorData.valveStatus === 'ON' ? 'VALVE OPEN' : 'VALVE CLOSED'}
-                          status={sensorData.valveStatus}
-                        />
-                        <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.6)' }}>
-                          {sensorData.valveStatus === 'ON' ? 'Water is flowing' : 'Water flow stopped'}
-                        </Typography>
+                      {/* Control Mode Toggle */}
+                      <Box sx={{ mb: 3 }}>
+                        <Tabs 
+                          value={controlMode} 
+                          onChange={(e, newValue) => {
+                            setControlMode(newValue);
+                            if (newValue === 'automatic') {
+                              // When switching to automatic, send signal to device
+                              handleSetAutomaticMode();
+                            } else if (newValue === 'manual') {
+                              // When switching to manual, send signal to device
+                              handleSetManualMode();
+                            }
+                          }}
+                          variant="fullWidth"
+                          sx={{
+                            '& .MuiTab-root': {
+                              color: 'rgba(255, 255, 255, 0.7)',
+                              fontWeight: 500,
+                            },
+                            '& .Mui-selected': {
+                              color: '#4caf50 !important',
+                            },
+                            '& .MuiTabs-indicator': {
+                              backgroundColor: '#4caf50',
+                            },
+                          }}
+                        >
+                          <Tab 
+                            label="Automatic Mode" 
+                            value="automatic" 
+                            icon={<DeviceIcon />}
+                            iconPosition="start"
+                          />
+                          <Tab 
+                            label="Manual Control" 
+                            value="manual" 
+                            icon={<PowerSettingsNew />}
+                            iconPosition="start"
+                          />
+                        </Tabs>
                       </Box>
                       
-                      <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-                        <ControlButton
-                          variant="on"
-                          onClick={() => handleValveControl('ON')}
-                          disabled={sensorData.valveStatus === 'ON'}
-                          startIcon={<Water />}
-                        >
-                          Open Valve
-                        </ControlButton>
-                        <ControlButton
-                          variant="off"
-                          onClick={() => handleValveControl('OFF')}
-                          disabled={sensorData.valveStatus === 'OFF'}
-                          startIcon={<PowerSettingsNew />}
-                        >
-                          Close Valve
-                        </ControlButton>
-                      </Box>
+                      {controlMode === 'automatic' ? (
+                        // Automatic Mode Display
+                        <Box>
+                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
+                            <StatusChip 
+                              label={sensorData.valveStatus === 'ON' ? 'VALVE OPEN' : 'VALVE CLOSED'}
+                              status={sensorData.valveStatus}
+                            />
+                            <Chip
+                              size="small"
+                              label={selectedDevice && deviceOnlineStatus[selectedDevice.deviceId] ? 'System Active' : 'Checking Status...'}
+                              color={selectedDevice && deviceOnlineStatus[selectedDevice.deviceId] ? 'primary' : 'default'}
+                              variant="outlined"
+                            />
+                          </Box>
+                          
+                          <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.8)', mb: 1 }}>
+                            {sensorData.valveStatus === 'ON' ? 'System is automatically watering based on soil moisture' : 'System monitoring - will activate when needed'}
+                          </Typography>
+                          
+                          <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.5)' }}>
+                            Current moisture: {sensorData.moisture}% | Threshold: 30%
+                          </Typography>
+                          
+                          <Box sx={{ mt: 2, p: 2, backgroundColor: 'rgba(76, 175, 80, 0.1)', borderRadius: '8px', border: '1px solid rgba(76, 175, 80, 0.3)' }}>
+                            <Typography variant="caption" sx={{ color: '#4caf50', fontWeight: 500 }}>
+                              💡 Automatic mode handles watering based on moisture levels and weather conditions
+                            </Typography>
+                          </Box>
+                        </Box>
+                      ) : (
+                        // Manual Mode Controls
+                        <Box>
+                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
+                            <StatusChip 
+                              label={sensorData.valveStatus === 'ON' ? 'VALVE OPEN' : 'VALVE CLOSED'}
+                              status={sensorData.valveStatus}
+                            />
+                            <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.6)' }}>
+                              {sensorData.valveStatus === 'ON' ? 'Water is flowing' : 'Water flow stopped'}
+                            </Typography>
+                          </Box>
+                          
+                          <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mb: 2 }}>
+                            <ControlButton
+                              variant="on"
+                              onClick={() => handleValveControl('ON')}
+                              disabled={sensorData.valveStatus === 'ON'}
+                              startIcon={<Water />}
+                            >
+                              Open Valve
+                            </ControlButton>
+                            <ControlButton
+                              variant="off"
+                              onClick={() => handleValveControl('OFF')}
+                              disabled={sensorData.valveStatus === 'OFF'}
+                              startIcon={<PowerSettingsNew />}
+                            >
+                              Close Valve
+                            </ControlButton>
+                          </Box>
+                          
+                          <Box sx={{ p: 2, backgroundColor: 'rgba(255, 193, 7, 0.1)', borderRadius: '8px', border: '1px solid rgba(255, 193, 7, 0.3)' }}>
+                            <Typography variant="caption" sx={{ color: '#ffc107', fontWeight: 500 }}>
+                              ⚠️ Manual mode overrides automatic watering. Switch back to automatic when done.
+                            </Typography>
+                          </Box>
+                        </Box>
+                      )}
                     </Box>
                   </Grid>
 
@@ -823,7 +989,7 @@ function Dashboard() {
                   </Grid>
                 </Grid>
               </CardContent>
-            </GlassCard>
+            </MD3Card>
           </Grid>
         </Grid>
       </Container>
@@ -832,7 +998,7 @@ function Dashboard() {
 
   return (
     <DashboardContainer>
-      <GlassAppBar position="static">
+      <MD3AppBar position="static" elevation={0}>
         <Toolbar>
           <DashboardIcon sx={{ marginRight: 2 }} />
           <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: 600 }}>
@@ -850,9 +1016,22 @@ function Dashboard() {
             </Typography>
           )}
           
-          <RefreshButton onClick={handleRefresh}>
+          <IconButton
+            onClick={onToggleDarkMode}
+            sx={{ 
+              marginRight: 1,
+              color: (theme) => theme.palette.md3?.onSurface || theme.palette.text.primary,
+              '&:hover': {
+                backgroundColor: (theme) => `${theme.palette.md3?.onSurface || theme.palette.text.primary}08`,
+              }
+            }}
+          >
+            {darkMode ? <LightModeIcon /> : <DarkModeIcon />}
+          </IconButton>
+          
+          <MD3RefreshButton onClick={handleRefresh}>
             <Refresh />
-          </RefreshButton>
+          </MD3RefreshButton>
           
           <Typography variant="body2" sx={{ marginLeft: 2, marginRight: 2 }}>
             {currentUser?.email}
@@ -875,22 +1054,31 @@ function Dashboard() {
             Logout
           </Button>
         </Toolbar>
-      </GlassAppBar>
+      </MD3AppBar>
 
       {/* Navigation Tabs */}
-      <Box sx={{ borderBottom: 1, borderColor: 'rgba(255,255,255,0.1)' }}>
+      <Box sx={{ 
+        borderBottom: 1, 
+        borderColor: (theme) => theme.palette.md3?.outlineVariant || theme.palette.divider,
+        backgroundColor: (theme) => theme.palette.md3?.surface || theme.palette.background.paper,
+      }}>
         <Tabs 
           value={currentTab} 
           onChange={handleTabChange}
           sx={{
             '& .MuiTab-root': {
-              color: 'rgba(255,255,255,0.7)',
+              textTransform: 'none',
+              fontWeight: 500,
+              fontSize: '0.875rem',
+              color: (theme) => theme.palette.md3?.onSurfaceVariant || theme.palette.text.secondary,
               '&.Mui-selected': {
-                color: 'white',
+                color: (theme) => theme.palette.md3?.primary || theme.palette.primary.main,
               }
             },
             '& .MuiTabs-indicator': {
-              backgroundColor: '#667eea',
+              backgroundColor: (theme) => theme.palette.md3?.primary || theme.palette.primary.main,
+              height: '3px',
+              borderRadius: '3px',
             }
           }}
         >
@@ -898,19 +1086,16 @@ function Dashboard() {
             label="Dashboard" 
             icon={<DashboardIcon />}
             iconPosition="start"
-            sx={{ textTransform: 'none', fontWeight: 600 }}
           />
           <Tab 
             label="Device Manager" 
             icon={<DeviceIcon />}
             iconPosition="start"
-            sx={{ textTransform: 'none', fontWeight: 600 }}
           />
           <Tab 
             label="Analytics" 
             icon={<AnalyticsIcon />}
             iconPosition="start"
-            sx={{ textTransform: 'none', fontWeight: 600 }}
           />
         </Tabs>
       </Box>
@@ -928,8 +1113,6 @@ function Dashboard() {
         </Container>
       )}
 
-      {/* Notification System */}
-      <NotificationSystem devices={devices} />
     </DashboardContainer>
   );
 }
