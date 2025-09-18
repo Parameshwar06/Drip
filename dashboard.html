@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SlopeFlow - Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #2e7d32;
+            --secondary: #7cb342;
+            --accent: #f9a825;
+            --light: #f1f8e9;
+            --dark: #1b5e20;
+            --gray: #f5f5f5;
+            --danger: #f44336;
+            --warning: #ff9800;
+            --info: #2196f3;
+            --success: #4caf50;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: #333;
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Dark mode styles */
+        body.dark {
+            background: radial-gradient(1200px 600px at 80% -10%, rgba(76,175,80,0.12), transparent 60%),
+                        radial-gradient(900px 500px at -10% 110%, rgba(255,193,7,0.08), transparent 60%),
+                        #0e0f10;
+            color: #e6e6e6;
+        }
+        
+        body.dark .sidebar {
+            background: rgba(20,20,22,0.8);
+            border-right: 1px solid rgba(255,255,255,0.06);
+        }
+        
+        body.dark .header {
+            background: rgba(20,20,22,0.6);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        
+        body.dark .card,
+        body.dark .chart-container,
+        body.dark .device-card {
+            background: #141416;
+            border: 1px solid rgba(255,255,255,0.06);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+        }
+        
+        body.dark .stat-info p {
+            color: #bbb;
+        }
+        
+        body.dark .search-box {
+            background: rgba(255,255,255,0.08);
+        }
+        
+        body.dark .search-box input {
+            color: #e0e0e0;
+        }
+        
+        /* Smooth theme transitions */
+        body, header, .card, .chart-container, .device-card, .theme-toggle {
+            transition: background-color 250ms ease, color 250ms ease, border-color 250ms ease, box-shadow 250ms ease;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background: var(--primary);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sidebar-header {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+        }
+        
+        .sidebar-header h2 {
+            font-size: 1.5rem;
+            margin-left: 10px;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+            padding: 20px 0;
+        }
+        
+        .sidebar-menu li {
+            padding: 10px 20px;
+            margin: 5px 0;
+            transition: all 0.3s;
+        }
+        
+        .sidebar-menu li:hover {
+            background: var(--primary-dark);
+        }
+        
+        .sidebar-menu li.active {
+            background: var(--primary-dark);
+            border-left: 4px solid var(--accent);
+        }
+        
+        .sidebar-menu a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        
+        .sidebar-menu i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Header */
+        .header {
+            background: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: #f5f5f5;
+            padding: 8px 15px;
+            border-radius: 20px;
+            width: 300px;
+        }
+        
+        .search-box input {
+            border: none;
+            background: transparent;
+            outline: none;
+            margin-left: 10px;
+            width: 100%;
+        }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        
+        .theme-toggle {
+            background: #333;
+            color: #fff;
+            border: none;
+            padding: 10px 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.3s, transform 0.2s;
+        }
+        
+        .theme-toggle:hover {
+            background: #000;
+        }
+        
+        body.dark .theme-toggle {
+            background: #e0e0e0;
+            color: #111;
+        }
+        
+        body.dark .theme-toggle:hover {
+            background: #cfcfcf;
+        }
+        
+        /* Dashboard Content */
+        .dashboard {
+            padding: 30px;
+            overflow-y: auto;
+        }
+        
+        .page-title {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .page-title h1 {
+            font-size: 1.8rem;
+            color: var(--dark);
+        }
+        
+        body.dark .page-title h1 {
+            color: #9de8a5;
+        }
+        
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .stat-card {
+            display: flex;
+            align-items: center;
+        }
+        
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-right: 15px;
+        }
+        
+        .stat-info h3 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+        
+        .stat-info p {
+            color: var(--gray);
+        }
+        
+        .temp-icon {
+            background: rgba(244, 67, 54, 0.1);
+            color: var(--danger);
+        }
+        
+        .moisture-icon {
+            background: rgba(33, 150, 243, 0.1);
+            color: var(--info);
+        }
+        
+        .light-icon {
+            background: rgba(255, 152, 0, 0.1);
+            color: var(--warning);
+        }
+        
+        .ph-icon {
+            background: rgba(76, 175, 80, 0.1);
+            color: var(--success);
+        }
+        
+        .charts-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .chart-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        body.dark .chart-title {
+            color: #e0e0e0;
+        }
+        
+        .devices-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .device-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .device-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .device-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .device-status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+        
+        .status-active {
+            background: rgba(76, 175, 80, 0.1);
+            color: var(--success);
+        }
+        
+        .status-inactive {
+            background: rgba(244, 67, 54, 0.1);
+            color: var(--danger);
+        }
+        
+        .device-details {
+            margin-top: 10px;
+        }
+        
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        body.dark .detail-item {
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .device-actions {
+            margin-top: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+        
+        .btn-secondary {
+            background: #f5f5f5;
+            color: var(--dark);
+        }
+        
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+        
+        body.dark .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: #e0e0e0;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        body.dark .modal-content {
+            background-color: #1e1e1e;
+            color: #e0e0e0;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-header h2 {
+            color: var(--primary);
+        }
+        
+        body.dark .modal-header h2 {
+            color: #7cb342;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+        }
+        
+        .close-modal:hover {
+            color: var(--danger);
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        body.dark .form-group input,
+        body.dark .form-group select,
+        body.dark .form-group textarea {
+            background-color: #2a2a2a;
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 80px;
+            }
+            
+            .sidebar-header h2, .sidebar-menu span {
+                display: none;
+            }
+            
+            .sidebar-menu li {
+                text-align: center;
+                padding: 15px 10px;
+            }
+            
+            .sidebar-menu i {
+                margin-right: 0;
+                font-size: 1.5rem;
+            }
+            
+            .charts-row {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .search-box {
+                width: 200px;
+            }
+            
+            .stats-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .search-box {
+                width: 100%;
+                margin: 10px 0;
+            }
+            
+            .header-right {
+                margin-top: 10px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .container {
+                padding: 0 14px;
+            }
+            
+            .dashboard {
+                padding: 15px;
+            }
+            
+            .device-card {
+                padding: 16px;
+            }
+            
+            .page-title h1 {
+                font-size: 1.5rem;
+            }
+            
+            .modal-content {
+                width: 95%;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <i class="fas fa-leaf fa-2x"></i>
+            <h2>SlopeFlow</h2>
+        </div>
+        <ul class="sidebar-menu">
+            <li class="active">
+                <a href="#">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fas fa-seedling"></i>
+                    <span>Crops</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fas fa-tint"></i>
+                    <span>Irrigation</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fas fa-wind"></i>
+                    <span>Climate</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fas fa-table"></i>
+                    <span>Soil Data</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fas fa-tools"></i>
+                    <span>Settings</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search devices...">
+            </div>
+            <div class="header-right">
+                <button class="theme-toggle">
+                    <span class="theme-icon">🌙</span>
+                    <span class="theme-label">Dark Mode</span>
+                </button>
+                <div class="user-profile">
+                    <img src="https://ui-avatars.com/api/?name=Admin+User&background=2e7d32&color=fff" alt="User">
+                    <div>
+                        <h4>Admin User</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Content -->
+        <div class="dashboard">
+            <div class="page-title">
+                <h1>Farm Monitoring Dashboard</h1>
+                <button class="btn btn-primary" id="addDeviceBtn">
+                    <i class="fas fa-plus"></i> Add New Device
+                </button>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-cards">
+                <div class="card stat-card">
+                    <div class="stat-icon temp-icon">
+                        <i class="fas fa-thermometer-half"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>26.5°C</h3>
+                        <p>Temperature</p>
+                    </div>
+                </div>
+                <div class="card stat-card">
+                    <div class="stat-icon moisture-icon">
+                        <i class="fas fa-tint"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>42%</h3>
+                        <p>Soil Moisture</p>
+                    </div>
+                </div>
+                <div class="card stat-card">
+                    <div class="stat-icon light-icon">
+                        <i class="fas fa-sun"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>78%</h3>
+                        <p>Light Intensity</p>
+                    </div>
+                </div>
+                <div class="card stat-card">
+                    <div class="stat-icon ph-icon">
+                        <i class="fas fa-vial"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>6.8 pH</h3>
+                        <p>Soil pH</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="charts-row">
+                <div class="chart-container">
+                    <h3 class="chart-title">Environmental Trends</h3>
+                    <canvas id="environmentChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h3 class="chart-title">Device Distribution</h3>
+                    <canvas id="deviceDistributionChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Devices Grid -->
+            <h2 style="margin-bottom: 20px; color: var(--dark);">Monitoring Devices</h2>
+            <div class="devices-grid" id="devicesContainer">
+                <!-- Devices will be dynamically added here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Device Modal -->
+    <div class="modal" id="addDeviceModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New Device</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="deviceForm">
+                <div class="form-group">
+                    <label for="deviceName">Device Name</label>
+                    <input type="text" id="deviceName" required placeholder="e.g., Field Sensor #1">
+                </div>
+                <div class="form-group">
+                    <label for="deviceType">Device Type</label>
+                    <select id="deviceType" required>
+                        <option value="">Select Device Type</option>
+                        <option value="field">Field Sensor</option>
+                        <option value="greenhouse">Greenhouse Monitor</option>
+                        <option value="irrigation">Irrigation Controller</option>
+                        <option value="weather">Weather Station</option>
+                        <option value="drone">Agricultural Drone</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="deviceLocation">Location</label>
+                    <input type="text" id="deviceLocation" required placeholder="e.g., North Field">
+                </div>
+                <div class="form-group">
+                    <label for="deviceDescription">Description</label>
+                    <textarea id="deviceDescription" rows="3" placeholder="Device purpose and specifications"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Device</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Sample device data
+        const sampleDevices = [
+            {
+                id: 1,
+                name: "Field Kit #1",
+                type: "field",
+                location: "North Field",
+                status: "active",
+                battery: 78,
+                lastUpdate: "2 minutes ago",
+                metrics: {
+                    temperature: "26.5°C",
+                    moisture: "42%"
+                }
+            },
+            {
+                id: 2,
+                name: "Greenhouse Monitor",
+                type: "greenhouse",
+                location: "Greenhouse A",
+                status: "active",
+                battery: 92,
+                lastUpdate: "5 minutes ago",
+                metrics: {
+                    temperature: "28.1°C",
+                    humidity: "65%"
+                }
+            },
+            {
+                id: 3,
+                name: "Irrigation Controller",
+                type: "irrigation",
+                location: "South Field",
+                status: "inactive",
+                battery: 23,
+                lastUpdate: "1 hour ago",
+                metrics: {
+                    waterFlow: "0 L/min",
+                    pressure: "2.1 bar"
+                }
+            }
+        ];
+
+        // Theme Toggle Functionality
+        function applyTheme(theme) {
+            const enableDark = theme === 'dark';
+            document.body.classList.toggle('dark', enableDark);
+            const btn = document.querySelector('.theme-toggle');
+            if (btn) {
+                const icon = btn.querySelector('.theme-icon');
+                const label = btn.querySelector('.theme-label');
+                if (icon) { 
+                    icon.textContent = enableDark ? '☀' : '🌙'; 
+                    icon.style.transform = 'scale(1.15)'; 
+                    setTimeout(() => { icon.style.transform = 'scale(1)'; }, 180); 
+                }
+                if (label) label.textContent = enableDark ? 'Light Mode' : 'Dark Mode';
+            }
+        }
+        
+        function initTheme() {
+            const saved = localStorage.getItem('theme') || 'light';
+            applyTheme(saved);
+            const btn = document.querySelector('.theme-toggle');
+            if (btn) {
+                btn.addEventListener('click', () => {
+                    const current = document.body.classList.contains('dark') ? 'dark' : 'light';
+                    const next = current === 'dark' ? 'light' : 'dark';
+                    localStorage.setItem('theme', next);
+                    applyTheme(next);
+                });
+            }
+        }
+
+        // Modal functionality
+        function initModal() {
+            const modal = document.getElementById('addDeviceModal');
+            const addBtn = document.getElementById('addDeviceBtn');
+            const cancelBtn = document.getElementById('cancelBtn');
+            const closeBtn = document.querySelector('.close-modal');
+            const form = document.getElementById('deviceForm');
+
+            addBtn.addEventListener('click', () => {
+                modal.style.display = 'flex';
+            });
+
+            const closeModal = () => {
+                modal.style.display = 'none';
+                form.reset();
+            };
+
+            cancelBtn.addEventListener('click', closeModal);
+            closeBtn.addEventListener('click', closeModal);
+
+            window.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                addNewDevice();
+                closeModal();
+            });
+        }
+
+        // Device management functions
+        function getDevices() {
+            const storedDevices = localStorage.getItem('slopeflowDevices');
+            return storedDevices ? JSON.parse(storedDevices) : sampleDevices;
+        }
+
+        function saveDevices(devices) {
+            localStorage.setItem('slopeflowDevices', JSON.stringify(devices));
+        }
+
+        function addNewDevice() {
+            const name = document.getElementById('deviceName').value;
+            const type = document.getElementById('deviceType').value;
+            const location = document.getElementById('deviceLocation').value;
+            const description = document.getElementById('deviceDescription').value;
+
+            const devices = getDevices();
+            const newDevice = {
+                id: Date.now(),
+                name,
+                type,
+                location,
+                status: "active",
+                battery: Math.floor(Math.random() * 50) + 50,
+                lastUpdate: "Just now",
+                description,
+                metrics: getDefaultMetrics(type)
+            };
+
+            devices.push(newDevice);
+            saveDevices(devices);
+            renderDevices();
+            updateCharts();
+        }
+
+        function getDefaultMetrics(type) {
+            switch(type) {
+                case 'field':
+                    return { temperature: "24.5°C", moisture: "38%" };
+                case 'greenhouse':
+                    return { temperature: "26.8°C", humidity: "70%" };
+                case 'irrigation':
+                    return { waterFlow: "5.2 L/min", pressure: "2.8 bar" };
+                case 'weather':
+                    return { windSpeed: "12 km/h", rainfall: "0 mm" };
+                case 'drone':
+                    return { altitude: "45m", coverage: "12 acres" };
+                default:
+                    return { status: "Active", reading: "Normal" };
+            }
+        }
+
+        function renderDevices() {
+            const devicesContainer = document.getElementById('devicesContainer');
+            const devices = getDevices();
+            
+            devicesContainer.innerHTML = '';
+            
+            devices.forEach(device => {
+                const deviceCard = document.createElement('div');
+                deviceCard.className = 'device-card';
+                
+                let metricsHTML = '';
+                for (const [key, value] of Object.entries(device.metrics)) {
+                    metricsHTML += `
+                        <div class="detail-item">
+                            <span>${formatMetricName(key)}:</span>
+                            <span>${value}</span>
+                        </div>
+                    `;
+                }
+                
+                deviceCard.innerHTML = `
+                    <div class="device-header">
+                        <div class="device-name">${device.name}</div>
+                        <div class="device-status status-${device.status}">${device.status === 'active' ? 'Active' : 'Inactive'}</div>
+                    </div>
+                    <div class="device-details">
+                        <div class="detail-item">
+                            <span>Location:</span>
+                            <span>${device.location}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span>Battery:</span>
+                            <span>${device.battery}%</span>
+                        </div>
+                        <div class="detail-item">
+                            <span>Last Update:</span>
+                            <span>${device.lastUpdate}</span>
+                        </div>
+                        ${metricsHTML}
+                        ${device.description ? `
+                        <div class="detail-item">
+                            <span>Description:</span>
+                            <span>${device.description}</span>
+                        </div>` : ''}
+                    </div>
+                    <div class="device-actions">
+                        <button class="btn btn-secondary" onclick="editDevice(${device.id})">Edit</button>
+                        <button class="btn btn-primary" onclick="configureDevice(${device.id})">Configure</button>
+                        <button class="btn btn-secondary" onclick="removeDevice(${device.id})">Remove</button>
+                    </div>
+                `;
+                
+                devicesContainer.appendChild(deviceCard);
+            });
+        }
+
+        function formatMetricName(key) {
+            return key.split(/(?=[A-Z])/).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+        }
+
+        function editDevice(id) {
+            alert(`Edit functionality for device ${id} would open here.`);
+        }
+
+        function configureDevice(id) {
+            alert(`Configure functionality for device ${id} would open here.`);
+        }
+
+        function removeDevice(id) {
+            if (confirm('Are you sure you want to remove this device?')) {
+                const devices = getDevices();
+                const updatedDevices = devices.filter(device => device.id !== id);
+                saveDevices(updatedDevices);
+                renderDevices();
+                updateCharts();
+            }
+        }
+
+        // Charts
+        function initCharts() {
+            // Environment Chart
+            const envCtx = document.getElementById('environmentChart').getContext('2d');
+            window.environmentChart = new Chart(envCtx, {
+                type: 'line',
+                data: {
+                    labels: ['6:00', '9:00', '12:00', '15:00', '18:00', '21:00', '00:00'],
+                    datasets: [
+                        {
+                            label: 'Temperature (°C)',
+                            data: [20, 24, 28, 30, 26, 22, 20],
+                            borderColor: '#f44336',
+                            backgroundColor: 'rgba(244, 67, 54, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        },
+                        {
+                            label: 'Humidity (%)',
+                            data: [80, 70, 55, 45, 60, 75, 85],
+                            borderColor: '#2196f3',
+                            backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false
+                        }
+                    }
+                }
+            });
+
+            // Device Distribution Chart
+            const devCtx = document.getElementById('deviceDistributionChart').getContext('2d');
+            window.deviceDistributionChart = new Chart(devCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Field Sensors', 'Greenhouse Monitors', 'Irrigation Controllers', 'Weather Stations', 'Drones'],
+                    datasets: [{
+                        data: [5, 3, 2, 2, 1],
+                        backgroundColor: [
+                            '#4caf50',
+                            '#ff9800',
+                            '#2196f3',
+                            '#9e9e9e',
+                            '#9c27b0'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateCharts() {
+            const devices = getDevices();
+            const typeCount = {
+                field: 0,
+                greenhouse: 0,
+                irrigation: 0,
+                weather: 0,
+                drone: 0
+            };
+
+            devices.forEach(device => {
+                if (typeCount.hasOwnProperty(device.type)) {
+                    typeCount[device.type]++;
+                }
+            });
+
+            window.deviceDistributionChart.data.datasets[0].data = [
+                typeCount.field,
+                typeCount.greenhouse,
+                typeCount.irrigation,
+                typeCount.weather,
+                typeCount.drone
+            ];
+            
+            window.deviceDistributionChart.update();
+        }
+
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', function() {
+            initTheme();
+            initModal();
+            initCharts();
+            renderDevices();
+            
+            // Simulate real-time data updates
+            setInterval(() => {
+                // Update temperature with small random fluctuations
+                const tempElement = document.querySelector('.stat-card:nth-child(1) h3');
+                const currentTemp = parseFloat(tempElement.textContent);
+                const newTemp = (currentTemp + (Math.random() * 0.4 - 0.2)).toFixed(1);
+                tempElement.textContent = `${newTemp}°C`;
+                
+                // Update moisture with small random fluctuations
+                const moistureElement = document.querySelector('.stat-card:nth-child(2) h3');
+                const currentMoisture = parseFloat(moistureElement.textContent);
+                const newMoisture = Math.max(30, Math.min(80, currentMoisture + (Math.random() * 2 - 1))).toFixed(0);
+                moistureElement.textContent = `${newMoisture}%`;
+            }, 10000);
+        });
+    </script>
+</body>
+</html>
